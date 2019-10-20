@@ -1,17 +1,10 @@
 # Fiszker
 
-Flashcards, simply.
+💡 Flashcards, simply.
 
 This is a very much **work in progress** - currently there's only Polish translation available and
 there are no builds at GitHub, Google Play or AppStore. You can `git clone` the application and
 `flutter run` it on your own though.
-
-## Goals
-
-- Free as in beer
-- Modern, material design UI
-- Server-free - everything's saved on users' phones only
-- Android & iOS support
 
 ## Screenshots
 
@@ -20,41 +13,41 @@ there are no builds at GitHub, Google Play or AppStore. You can `git clone` the 
 <img src="readme/3.png" width="250px"/>
 <img src="readme/4.png" width="250px"/>
 
-## Milestones
+## Goals
 
-### 0.1
+- Free as in "free beer"
+- Simple, performant, Material-Design-compliant interface
+- Server-free - everything's stored solely on users' phones
+- Android & iOS support
+
+## Pending tasks
+
+### Before first release
 
 - Get rid of all the current `@todo`s in both README and code
 - Write some tests
 - Upload application to Google Play
 
-### 0.2
+### After first release
 
-- Implement English translation
-- Implement exercise statistics
-- Implement the "pairing sides" exercise
-- Improve interface's interactivity (e.g. add an animation after deleting a deck)
-- Optimize interface for tablets (currently the application is totally unprepared for landscape views)
-- Upload application to AppStore
+- Add English translation
+- Implement more exercise types
+- Implement exercising statistics
+- Improve UI's interactivity (e.g. animate deleing a deck)
+- Optimize UI for tables (currently it's totally unprepared for landscape views)
+- Implement graphics cards
+- Implement learning models (like the Leitner system)
+- Implement syncing decks via Bluetooth (if it's possible at all)
 
-### 0.3
+## Architecture
 
-- Implement graphic cards (instead of text-only, as for now)
-- Implement learning models (instead of plain-old exercising - like the Leitner system)
-
-### 0.4
-
-- Implement syncing decks via Bluetooth (if it's possible)
+See: [docs/architecture.md](docs/architecture.md)
 
 ## Contributing
 
-@todo
-
-### Code design
-
-@todo
+See: [docs/contributing.md](docs/contributing.md)
 
 ## License
 
-Copyright (c) 2019, Patryk Wychowaniec wychowaniec.patryk@gmail.com.
+Copyright (c) 2019, Patryk Wychowaniec, wychowaniec.patryk@gmail.com.    
 Licensed under the MIT / Postcardware license.
