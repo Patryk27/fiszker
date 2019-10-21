@@ -17,8 +17,8 @@ class CardPopulatedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      primary: false,
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
       itemCount: cards.length,
 
       itemBuilder: (BuildContext context, int index) {
