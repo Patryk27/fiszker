@@ -8,10 +8,11 @@ there are no builds at GitHub, Google Play or AppStore. You can `git clone` the 
 
 ## Screenshots
 
-<img src="readme/1.png" width="250px"/>
-<img src="readme/2.png" width="250px"/>
-<img src="readme/3.png" width="250px"/>
-<img src="readme/4.png" width="250px"/>
+<img src="docs/screenshots/1.png" width="250px"/>
+<img src="docs/screenshots/2.png" width="250px"/>
+<img src="docs/screenshots/3.png" width="250px"/>
+<img src="docs/screenshots/4.png" width="250px"/>
+<img src="docs/screenshots/5.png" width="250px"/>
 
 ## Goals
 
