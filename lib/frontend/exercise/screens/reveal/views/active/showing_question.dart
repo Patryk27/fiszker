@@ -24,9 +24,12 @@ class ShowingQuestion extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Center(
-            child: CardSide(
-              size: Size(300, 300),
-              text: card.front,
+            child: GestureDetector(
+              onTap: onRevealAnswerPressed,
+              child: CardSide(
+                size: Size(300, 300),
+                text: card.front,
+              ),
             ),
           ),
         ),
