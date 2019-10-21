@@ -1,11 +1,16 @@
+import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
+/// This widget models a generic "This list is empty" message.
+///
+/// It's used whenever there's a possibility of having an empty list presented to user, so that they don't get lost
+/// (see: [callToAction]).
 class EmptyList extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String message;
-  final String callToAction;
-  final void Function() onCallToAction;
+  final String message; // @todo use Optional
+  final String callToAction; // @todo use Optional
+  final void Function() onCallToAction; // @todo use Optional
 
   const EmptyList({
     @required this.icon,
@@ -75,7 +80,8 @@ class EmptyList extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(DIALOG_PADDING),
+
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
