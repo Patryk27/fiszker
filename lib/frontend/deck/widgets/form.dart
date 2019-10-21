@@ -65,7 +65,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.close),
-            onPressed: dismiss,
+            onPressed: maybeDismiss,
           ),
 
           title: (widget.formBehavior == DeckFormBehavior.createDeck)
@@ -138,11 +138,6 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
     tabController.dispose();
 
     super.dispose();
-  }
-
-  /// Abandons the form and goes back to the previous screen.
-  void dismiss() {
-    Navigator.pop(context);
   }
 
   /// Validates the form and, if everything is correct, submits it.
@@ -234,6 +229,13 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
     return false;
   }
 
+  /// Asks the user whether they want to abandon the form and, if confirmed, pops back to the previous screen.
+  Future<void> maybeDismiss() async {
+    if (await confirmDismiss()) {
+      Navigator.pop(context);
+    }
+  }
+
   /// Asks the user whether they want to abandon the form and returns the confirmation's result.
   Future<bool> confirmDismiss() async {
     // If the form's not dirty, don't bother asking user
@@ -243,7 +245,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
 
     return await confirm(
       context: context,
-      title: 'Zamykanie formularza',
+      title: 'Zamknąć formularz?',
       message: 'Czy chcesz zamknąć formularz?\nStracisz niezapisane zmiany.',
     );
   }
