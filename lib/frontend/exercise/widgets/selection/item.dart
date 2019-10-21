@@ -20,7 +20,12 @@ class ExerciseSelectionItem extends StatelessWidget {
       onTap: onTapped,
       child: ListTile(
         title: Text(name),
-        subtitle: Text(description, textAlign: TextAlign.justify),
+
+        subtitle: Text(
+          description,
+          textAlign: TextAlign.justify,
+          textScaleFactor: 0.9,
+        ),
       ),
     );
   }
