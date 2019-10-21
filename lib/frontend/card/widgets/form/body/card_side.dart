@@ -48,6 +48,13 @@ class _CardSideState extends State<CardSide> {
           validator: (value) {
             return value.isEmpty ? 'Treść nie może być pusta.' : null;
           },
+
+          onEditingComplete: () {
+            // When user finishes editing, dismiss the keyboard
+            FocusScope
+                .of(context)
+                .unfocus();
+          },
         ),
       ],
     );
