@@ -7,7 +7,7 @@ import '../events.dart';
 import '../states.dart';
 
 /// Saves all changes (renames, added cards and so on) to the database.
-/// It's dispatched when user clicks the "Save" button.
+/// It's dispatched when user clicks the "Submit" button.
 class Submit extends BlocEvent {
   final DeckFormBehavior formBehavior;
   final DeckModel deck;

@@ -4,24 +4,28 @@ import 'package:flutter/material.dart';
 import 'body/card_side.dart';
 
 class CardFormBody extends StatelessWidget {
+  final GlobalKey<FormState> formKey;
   final CardModel card;
   final void Function(CardModel card) onChanged;
 
   CardFormBody({
+    @required this.formKey,
     @required this.card,
     @required this.onChanged,
   })
-      : assert(card != null),
+      : assert(formKey != null),
+        assert(card != null),
         assert(onChanged != null);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24),
+    return Form(
+      key: formKey,
+
       child: Column(
         children: [
           CardSide(
-            title: 'Awers fiszki',
+            title: 'Treść awersu',
             hint: 'np.: cztery ostatnie cyfry Pi',
             value: card.front,
             autofocus: card.front.isEmpty,
@@ -36,7 +40,7 @@ class CardFormBody extends StatelessWidget {
           const SizedBox(height: 15),
 
           CardSide(
-            title: 'Rewers fiszki',
+            title: 'Treść rewersu',
             hint: 'np.: 042',
             value: card.back,
             autofocus: false,

@@ -1,6 +1,6 @@
-import 'package:fiszker/frontend.dart';
-import 'package:fiszker/theme.dart';
+import 'package:fiszker/frontend.dart' as frontend;
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
 import 'selection/item.dart';
 
@@ -13,31 +13,21 @@ class ExerciseSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(DIALOG_PADDING),
+    return frontend.BottomSheet(
+      title: Optional.of('Wybierz ćwiczenie'),
 
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      body: ListView(
+        primary: false,
+        shrinkWrap: true,
 
         children: [
-          const BottomSheetTitle(
-            title: 'Wybierz ćwiczenie',
-          ),
+          ExerciseSelectionItem(
+            name: 'Odkrywanie',
+            description: 'Z zestawu zostaje wylosowana jedna karta, pokazywana jest Ci jej jedna strona, a Twoim zadaniem jest przypomnieć sobie zawartość drugiej.',
 
-          ListView(
-            primary: false,
-            shrinkWrap: true,
-
-            children: [
-              ExerciseSelectionItem(
-                name: 'Odkrywanie',
-                description: 'Z zestawu zostaje wylosowana jedna karta, pokazywana jest Ci jej jedna strona, a Twoim zadaniem jest przypomnieć sobie zawartość drugiej.',
-
-                onTapped: () {
-                  onExerciseSelected('reveal');
-                },
-              ),
-            ],
+            onTapped: () {
+              onExerciseSelected('reveal');
+            },
           ),
         ],
       ),

@@ -274,14 +274,14 @@ class _ActiveViewState extends State<ActiveView> with TickerProviderStateMixin {
     changingCardsAnimationController.forward(from: 0);
   }
 
-  /// Asks the user whether they want to abandon the exercise and, if confirmed, pops back to the previous screen.
+  /// Asks user whether they want to abandon the exercise and, if confirmed, pops back to the previous screen.
   Future<void> maybeDismiss() async {
     if (await confirmDismiss()) {
       Navigator.pop(context);
     }
   }
 
-  /// Asks the user whether they want to abandon the exercise and returns confirmation's result.
+  /// Asks user whether they want to abandon the exercise and returns confirmation's result.
   Future<bool> confirmDismiss() async {
     // There's no point in asking user, if we've not even started yet
     if (status == _ActiveViewStatus.awaitingStart) {

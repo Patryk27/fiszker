@@ -1,26 +1,29 @@
 import 'package:fiszker/backend.dart';
+import 'package:fiszker/frontend.dart' as frontend;
+import 'package:fiszker/frontend.dart';
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
-import 'form/actions.dart';
 import 'form/body.dart';
-import 'form/title.dart';
 
+/// Defines how the [CardForm] should act as - that is: whether it's supposed to be "Create a flashcard" or "Edit a
+/// flashcard" variant.
 enum CardFormBehavior {
   createCard,
-  updateCard,
+  editCard,
 }
 
-/// This widgets models a [Dialog] responsible for creating and managing deck's cards.
+/// This widgets models a bottom sheet responsible for creating and editing single cards.
 ///
-/// It does not touch the database on its own, you have to provide meaningful handlers for the [onSubmit] and
-/// [onDelete] events.
+/// Notice that it does not touch the database on its own - you have to provide meaningful handlers for the [onSubmit]
+/// and [onDelete] events.
 class CardForm extends StatefulWidget {
   final CardFormBehavior formBehavior;
   final CardModel card;
   final void Function(CardModel card) onSubmit;
   final void Function(CardModel card) onDelete;
 
-  /// Returns "Create a new flashcard" form.
+  /// Returns a form allowing to create a new flashcard.
   CardForm.createCard({
     Id deckId,
     @required this.onSubmit,
@@ -30,13 +33,13 @@ class CardForm extends StatefulWidget {
         assert(onSubmit != null),
         onDelete = null;
 
-  /// Returns "Edit this flashcard" form.
-  CardForm.updateCard({
+  /// Returns a form allowing to edit an existing flashcard.
+  CardForm.editCard({
     @required this.card,
     @required this.onSubmit,
     @required this.onDelete,
   })
-      : formBehavior = CardFormBehavior.updateCard,
+      : formBehavior = CardFormBehavior.editCard,
         assert(card != null),
         assert(onSubmit != null),
         assert(onDelete != null);
@@ -55,55 +58,122 @@ class _CardFormState extends State<CardForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      elevation: 1,
+    /// Builds bottom sheet's body.
+    Widget buildBody() {
+      return CardFormBody(
+        formKey: formKey,
+        card: card,
 
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        onChanged: (card) {
+          setState(() {
+            this.card = card;
+          });
+        },
+      );
+    }
 
-        children: [
-          CardFormTitle(
-            formBehavior: widget.formBehavior,
-            card: card,
+    /// Builds bottom sheet's actions.
+    List<Widget> buildActions() {
+      final actions = <Widget>[];
+
+      // "Delete" button, if applicable
+      if (widget.formBehavior == CardFormBehavior.editCard) {
+        actions.add(
+          FlatButton(
+            child: const Text('USUŃ'),
+            onPressed: maybeDelete,
           ),
+        );
+      }
 
-          Form(
-            key: formKey,
+      // "Submit" button
+      actions.add(
+        FlatButton(
+          child: const Text('ZAPISZ'),
+          onPressed: submit,
+        ),
+      );
 
-            child: CardFormBody(
-              card: card,
+      return actions;
+    }
 
-              onChanged: (card) {
-                setState(() {
-                  this.card = card;
-                });
-              },
-            ),
-          ),
+    return WillPopScope(
+      onWillPop: confirmDismiss,
 
-          CardFormActions(
-            formBehavior: widget.formBehavior,
-            card: card,
+      child: frontend.BottomSheet(
+        title: Optional.of(
+            (widget.formBehavior == CardFormBehavior.createCard)
+                ? 'Tworzenie fiszki'
+                : 'Edycja fiszki'
+        ),
 
-            onSubmit: () {
-              if (formKey.currentState.validate()) {
-                widget.onSubmit(card);
-                Navigator.pop(context);
-              }
-            },
-
-            onDelete: () {
-              widget.onDelete(card);
-              Navigator.pop(context);
-            },
-
-            onDismiss: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        body: buildBody(),
+        actions: buildActions(),
       ),
+    );
+  }
+
+  /// Returns whether this form is dirty (i.e. whether it contains any unsaved changes).
+  bool isDirty() {
+    return !card.isEqualTo(widget.card);
+  }
+
+  /// Submits this form.
+  void submit() {
+    widget.onSubmit(card);
+
+    Navigator.pop(context);
+  }
+
+  /// Asks user whether they want to delete this flashcard and, if confirmed, deletes it.
+  Future<void> maybeDelete() async {
+    final confirmed = await confirm(
+      context: context,
+      title: 'Usunąć fiszkę?',
+      message: 'Czy chcesz usunąć tę fiszkę?',
+      btnYes: 'USUŃ',
+      btnNo: 'NIE USUWAJ',
+    );
+
+    if (confirmed) {
+      widget.onDelete(widget.card);
+
+      Navigator.pop(context);
+    }
+  }
+
+  /// Asks user whether they want to abandon the form and, if confirmed, pops back to the previous screen.
+  Future<void> maybeDismiss() async {
+    if (await confirmDismiss()) {
+      Navigator.pop(context);
+    }
+  }
+
+  /// Asks user whether they want to abandon the form and returns the confirmation's result.
+  Future<bool> confirmDismiss() async {
+    // If the form's not dirty, don't bother asking user
+    if (!isDirty()) {
+      return true;
+    }
+
+    String message;
+
+    switch (widget.formBehavior) {
+      case CardFormBehavior.createCard:
+        message = 'Czy chcesz porzucić tworzenie tej fiszki?';
+        break;
+
+      case CardFormBehavior.editCard:
+        message = 'Czy chcesz porzucić edycję tej fiszki?';
+        break;
+    }
+
+    return await confirm(
+      context: context,
+      title: 'Porzucić fiszkę?',
+      message: message,
+      btnNo: 'WRÓĆ DO FORMULARZA',
+      btnYes: 'PORZUĆ',
     );
   }
 }

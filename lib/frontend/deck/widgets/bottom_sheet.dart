@@ -31,32 +31,24 @@ class _DeckBottomSheetState extends State<DeckBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return AnimatedCrossFade(
+      crossFadeState: crossFadeState,
+      duration: const Duration(milliseconds: 250),
 
-    return Container(
-      color: theme.dialogBackgroundColor,
-      width: double.maxFinite,
+      firstChild: DeckDetails(
+        deck: widget.deck,
+        onEditPressed: widget.onEditPressed,
+        onDeletePressed: widget.onDeletePressed,
 
-      child: AnimatedCrossFade(
-        crossFadeState: crossFadeState,
-        duration: const Duration(milliseconds: 250),
+        onExercisePressed: () {
+          setState(() {
+            crossFadeState = CrossFadeState.showSecond;
+          });
+        },
+      ),
 
-        firstChild: DeckDetails(
-          deck: widget.deck,
-
-          onEditPressed: widget.onEditPressed,
-          onDeletePressed: widget.onDeletePressed,
-
-          onExercisePressed: () {
-            setState(() {
-              crossFadeState = CrossFadeState.showSecond;
-            });
-          },
-        ),
-
-        secondChild: ExerciseSelection(
-          onExerciseSelected: widget.onExerciseSelected,
-        ),
+      secondChild: ExerciseSelection(
+        onExerciseSelected: widget.onExerciseSelected,
       ),
     );
   }

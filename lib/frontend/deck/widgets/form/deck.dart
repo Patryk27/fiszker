@@ -1,4 +1,5 @@
 import 'package:fiszker/backend.dart';
+import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'deck/name.dart';
@@ -24,16 +25,20 @@ class DeckFormDeckSection extends StatefulWidget {
 class _DeckFormDeckSectionState extends State<DeckFormDeckSection> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(TAB_VIEW_PADDING),
 
-      children: [
-        DeckNameField(
-          deck: widget.deck,
-          onChanged: widget.onDeckUpdated,
-        ),
-      ],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          DeckNameField(
+            deck: widget.deck,
+            onChanged: widget.onDeckUpdated,
+          ),
+        ],
+      ),
     );
   }
 }

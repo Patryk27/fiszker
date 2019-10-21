@@ -20,29 +20,23 @@ class DeckList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      primary: false,
+      shrinkWrap: true,
       itemCount: decks.length,
 
       itemBuilder: (context, index) {
         final deck = decks[index];
 
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 10,
-            top: (index == 0) ? 10 : 0,
-            right: 10,
-          ),
+        return DeckListItem(
+          deck: deck,
 
-          child: DeckListItem(
-            deck: deck,
+          onTapped: () {
+            onDeckTapped(deck);
+          },
 
-            onTapped: () {
-              onDeckTapped(deck);
-            },
-
-            onLongPressed: () {
-              onDeckLongPressed(deck);
-            },
-          ),
+          onLongPressed: () {
+            onDeckLongPressed(deck);
+          },
         );
       },
     );

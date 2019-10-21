@@ -38,6 +38,7 @@ class _DeckNameFieldState extends State<DeckNameField> {
       },
 
       onEditingComplete: () {
+        // When user finishes editing, dismiss the keyboard
         FocusScope
             .of(context)
             .unfocus();

@@ -5,23 +5,24 @@ import 'package:flutter/material.dart';
 import 'form/cards.dart';
 import 'form/deck.dart';
 
-/// Defines how the [DeckForm] should act - either as a "Create a new deck" or "Edit this deck" form.
+/// Defines how the [DeckForm] should act as - that is: whether it's supposed to be "Create a deck" or "Edit a deck"
+/// variant.
 enum DeckFormBehavior {
   createDeck,
   editDeck,
 }
 
-/// This widget models a [Screen] responsible for creating and updating decks.
+/// This widget models a scaffold responsible for creating and editing single decks.
 ///
-/// It does not touch the database on its own, you have to provide meaningful handlers for the [onSubmit] and
-/// [onDelete] events.
+/// Notice that it does not touch the database on its own - you have to provide meaningful handler for the [onSubmit]
+/// event.
 class DeckForm extends StatefulWidget {
   final DeckFormBehavior formBehavior;
   final DeckModel deck;
   final List<CardModel> cards;
   final void Function(DeckModel deck, List<CardModel> cards) onSubmit;
 
-  /// Returns "Create a new deck" form.
+  /// Returns a form allowing to create a new deck.
   DeckForm.createDeck({
     @required this.onSubmit,
   })
@@ -30,8 +31,8 @@ class DeckForm extends StatefulWidget {
         cards = [],
         assert(onSubmit != null);
 
-  /// Returns "Edit this deck" form.
-  DeckForm.updateDeck({
+  /// Returns a form allowing to edit an existing deck.
+  DeckForm.editDeck({
     @required this.deck,
     @required this.cards,
     @required this.onSubmit,
@@ -62,6 +63,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
       onWillPop: confirmDismiss,
 
       child: Scaffold(
+        // Screens's top-bar
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.close),
@@ -75,9 +77,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
           actions: [
             IconButton(
               icon: Icon(Icons.save),
-              onPressed: () {
-                submit();
-              },
+              onPressed: submit,
             ),
           ],
 
@@ -90,6 +90,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
           ),
         ),
 
+        // Screens's body
         body: Form(
           key: formKey,
 
@@ -97,26 +98,21 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
             controller: tabController,
 
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: DeckFormDeckSection(
-                  deck: deck,
-                  onDeckUpdated: handleDeckUpdated,
-                ),
+              DeckFormDeckSection(
+                deck: deck,
+                onDeckUpdated: handleDeckUpdated,
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: DeckFormCardsSection(
-                  cards: cards,
-                  onCreateCardPressed: createCard,
-                  onUpdateCardPressed: updateCard,
-                ),
+              DeckFormCardsSection(
+                cards: cards,
+                onCreateCardPressed: createCard,
+                onUpdateCardPressed: editCard,
               ),
             ],
           ),
         ),
 
+        // Screens's bottom-bar
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           tooltip: 'Dodaj fiszkę',
@@ -142,21 +138,28 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
 
   /// Validates the form and, if everything is correct, submits it.
   void submit() {
-    // @todo if validation fails, jump to appropriate tab
+    // Validate the form; if it's invalid, don't bother submitting
+    if (!formKey.currentState.validate()) {
+      // Currently only the deck's name can be entered incorrectly here - thanks to this we can safely force-jump to the
+      // first tab
+      tabController.animateTo(0);
 
-    if (formKey.currentState.validate()) {
-      widget.onSubmit(deck, cards);
+      return;
     }
+
+    widget.onSubmit(deck, cards);
   }
 
-  /// Opens the "Creating a card" modal.
-  void createCard() {
-    // Open the "Cards" tab
+  /// Opens the [CardForm], allowing user to create a new flashcard.
+  Future<void> createCard() async {
+    // Navigate to the "Cards" tab - just in case we aren't there
     tabController.animateTo(1);
 
-    // Show modal
-    showDialog(
+    // Open the "Create a flashcard" form
+    await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+
       builder: (context) {
         return CardForm.createCard(
           deckId: deck.id,
@@ -166,12 +169,18 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
     );
   }
 
-  /// Opens the "Updating a card" modal with specified flashcard.
-  void updateCard(CardModel card) {
-    showDialog(
+  /// Opens the [CardForm], allowing user to edit specified flashcard.
+  Future<void> editCard(CardModel card) async {
+    // Navigate to the "Cards" tab - just in case we aren't there
+    tabController.animateTo(1);
+
+    // Open the "Edit a flashcard" form
+    await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+
       builder: (context) {
-        return CardForm.updateCard(
+        return CardForm.editCard(
           card: card,
           onSubmit: handleCardUpdated,
           onDelete: handleCardDeleted,
@@ -210,7 +219,7 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
     });
   }
 
-  /// Returns whether this form is dirty (i.e. whether is contains any unsaved changes).
+  /// Returns whether this form is dirty (i.e. whether it contains any unsaved changes).
   bool isDirty() {
     if (!deck.isEqualTo(widget.deck)) {
       return true;
@@ -229,24 +238,38 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
     return false;
   }
 
-  /// Asks the user whether they want to abandon the form and, if confirmed, pops back to the previous screen.
+  /// Asks user whether they want to abandon the form and, if confirmed, pops back to the previous screen.
   Future<void> maybeDismiss() async {
     if (await confirmDismiss()) {
       Navigator.pop(context);
     }
   }
 
-  /// Asks the user whether they want to abandon the form and returns the confirmation's result.
+  /// Asks user whether they want to abandon the form and returns the confirmation's result.
   Future<bool> confirmDismiss() async {
     // If the form's not dirty, don't bother asking user
     if (!isDirty()) {
       return true;
     }
 
+    String message;
+
+    switch (widget.formBehavior) {
+      case DeckFormBehavior.createDeck:
+        message = 'Czy chcesz porzucić tworzenie tego zestawu?\nStracisz niezapisane zmiany.';
+        break;
+
+      case DeckFormBehavior.editDeck:
+        message = 'Czy chcesz porzucić edycję tego zestawu?\nStracisz niezapisane zmiany.';
+        break;
+    }
+
     return await confirm(
       context: context,
-      title: 'Zamknąć formularz?',
-      message: 'Czy chcesz zamknąć formularz?\nStracisz niezapisane zmiany.',
+      title: 'Porzucić zestaw?',
+      message: message,
+      btnNo: 'WRÓĆ DO FORMULARZA',
+      btnYes: 'PORZUĆ',
     );
   }
 }

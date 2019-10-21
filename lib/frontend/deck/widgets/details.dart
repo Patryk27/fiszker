@@ -1,8 +1,10 @@
 import 'package:fiszker/backend.dart';
+import 'package:fiszker/frontend.dart' as frontend;
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
-import 'details/actions.dart';
-import 'details/body.dart';
+import 'details/detail.dart';
 
 class DeckDetails extends StatelessWidget {
   final DeckViewModel deck;
@@ -23,20 +25,49 @@ class DeckDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return frontend.BottomSheet(
+      title: Optional.of(deck.deck.name),
 
-      children: [
-        DeckDetailsBody(
-          deck: deck,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+
+        children: [
+          DeckDetail(
+            title: 'Liczba fiszek:',
+            value: deck.cards.length.toString(),
+          ),
+
+          const SizedBox(height: 20),
+
+          DeckDetail(
+            title: 'Utworzony:',
+            value: timeago.format(deck.deck.createdAt),
+          ),
+
+          const SizedBox(height: 20),
+
+          DeckDetail(
+            title: 'Ostatnio ćwiczony:',
+            value: deck.deck.exercisedAt.map(timeago.format).orElse('-'),
+          ),
+        ],
+      ),
+
+      actions: [
+        FlatButton(
+          child: const Text('USUŃ'),
+          onPressed: onDeletePressed,
         ),
 
-        DeckDetailsActions(
-          deck: deck,
-          onDeletePressed: onDeletePressed,
-          onExercisePressed: onExercisePressed,
-          onEditPressed: onEditPressed,
+        FlatButton(
+          child: const Text('EDYTUJ'),
+          onPressed: onEditPressed,
+        ),
+
+        FlatButton(
+          child: const Text('ĆWICZ'),
+          onPressed: onExercisePressed,
         ),
       ],
     );

@@ -1,4 +1,3 @@
-import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetTitle extends StatelessWidget {
@@ -22,8 +21,6 @@ class BottomSheetTitle extends StatelessWidget {
             style: theme.textTheme.title,
           ),
         ),
-
-        const SizedBox(height: DIALOG_PADDING),
       ],
     );
   }

@@ -30,7 +30,7 @@ class InitializedView extends StatelessWidget {
         onSubmit: submit,
       );
     } else {
-      return DeckForm.updateDeck(
+      return DeckForm.editDeck(
         deck: state.deck,
         cards: state.cards,
         onSubmit: submit,

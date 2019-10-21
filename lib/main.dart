@@ -150,9 +150,9 @@ class Fiszker extends StatelessWidget {
           );
         },
 
-        'decks--update': (context) {
+        'decks--edit': (context) {
           return BlocProvider<DeckFormBloc>(
-            child: DeckFormScreen.updateDeck(
+            child: DeckFormScreen.editDeck(
               deck: ModalRoute
                   .of(context)
                   .settings

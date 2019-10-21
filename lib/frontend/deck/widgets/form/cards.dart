@@ -1,5 +1,6 @@
 import 'package:fiszker/backend.dart';
 import 'package:fiszker/frontend.dart';
+import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'cards/empty_list.dart';
@@ -30,11 +31,14 @@ class DeckFormCardsSection extends StatefulWidget {
 class _DeckFormCardsSectionState extends State<DeckFormCardsSection> with AutomaticKeepAliveClientMixin {
   String query = '';
 
+  /// We want this widget kept alive, so that the filtering (i.e. the [query] property) is preserved whenever user moves
+  /// through the form (e.g. when they switch to another tab and back here)
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    // To be kept alive, we must call our superclass first
     super.build(context);
 
     if (widget.cards.isEmpty) {
@@ -45,24 +49,28 @@ class _DeckFormCardsSectionState extends State<DeckFormCardsSection> with Automa
 
     return Scrollbar(
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            CardSearchField(
-              onChanged: (newQuery) {
-                setState(() {
-                  query = newQuery;
-                });
-              },
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(TAB_VIEW_PADDING),
 
-            CardPopulatedList(
-              cards: getCards(),
+          child: Column(
+            children: [
+              CardSearchField(
+                onChanged: (newQuery) {
+                  setState(() {
+                    query = newQuery;
+                  });
+                },
+              ),
 
-              onCardTapped: (card) {
-                widget.onUpdateCardPressed(card);
-              },
-            ),
-          ],
+              CardPopulatedList(
+                cards: getCards(),
+
+                onCardTapped: (card) {
+                  widget.onUpdateCardPressed(card);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

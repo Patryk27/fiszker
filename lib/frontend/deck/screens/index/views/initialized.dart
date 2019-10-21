@@ -2,15 +2,11 @@ import 'dart:async';
 
 import 'package:fiszker/backend.dart';
 import 'package:fiszker/frontend.dart';
-import 'package:fiszker/frontend/deck/screens/index/views/initialized/deck_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc.dart';
 import '../events.dart';
 import '../states.dart';
-import 'initialized/active_decks.dart';
-import 'initialized/archived_decks.dart';
-import 'initialized/completed_decks.dart';
 
 class InitializedView extends StatefulWidget {
   final InitializedState state;
@@ -28,14 +24,6 @@ class InitializedView extends StatefulWidget {
 class _InitializedViewState extends State<InitializedView> {
   @override
   Widget build(BuildContext context) {
-    DeckList buildDeckList(List<DeckViewModel> decks) {
-      return DeckList(
-        decks: decks,
-        onDeckTapped: showDeckDetails,
-        onDeckLongPressed: editDeck,
-      );
-    }
-
     return DefaultTabController(
       length: 3,
 
@@ -63,20 +51,74 @@ class _InitializedViewState extends State<InitializedView> {
           ),
         ),
 
-        body: TabBarView(children: [
-          ActiveDecksSection(
-            decks: buildDeckList(widget.state.activeDecks),
-            onCreateDeckPressed: createDeck,
-          ),
+        body: TabBarView(
+          children: [
+            // Active decks
+            DeckListTabView(
+              decks: widget.state.activeDecks,
 
-          CompletedDecksSection(
-            decks: buildDeckList(widget.state.completedDecks),
-          ),
+              listBuilder: (context) {
+                return DeckList(
+                  decks: widget.state.activeDecks,
+                  onDeckTapped: openDeck,
+                  onDeckLongPressed: editDeck,
+                );
+              },
 
-          ArchivedDecksSection(
-            decks: buildDeckList(widget.state.archivedDecks),
-          ),
-        ]),
+              emptyListBuilder: (context) {
+                return EmptyList(
+                  icon: Icons.layers,
+                  title: 'Nie masz aktywnych zestawów',
+                  message: 'Aby stworzyć zestaw, naciśnij plus widoczny u dołu ekranu lub wybierz:',
+                  callToAction: 'STWÓRZ ZESTAW',
+                  onCallToAction: createDeck,
+                );
+              },
+            ),
+
+            // Completed decks
+            DeckListTabView(
+              decks: widget.state.completedDecks,
+
+              listBuilder: (context) {
+                return DeckList(
+                  decks: widget.state.completedDecks,
+                  onDeckTapped: openDeck,
+                  onDeckLongPressed: editDeck,
+                );
+              },
+
+              emptyListBuilder: (context) {
+                return EmptyList(
+                  icon: Icons.check,
+                  title: 'Nie masz ukończonych zestawów',
+                  message: '... ale nie przejmuj się - na pewno w try miga coś uda Ci się ukończyć!',
+                );
+              },
+            ),
+
+            // Archived deck
+            DeckListTabView(
+              decks: widget.state.archivedDecks,
+
+              listBuilder: (context) {
+                return DeckList(
+                  decks: widget.state.archivedDecks,
+                  onDeckTapped: openDeck,
+                  onDeckLongPressed: editDeck,
+                );
+              },
+
+              emptyListBuilder: (context) {
+                return EmptyList(
+                  icon: Icons.archive,
+                  title: 'Nie masz zarchiwizowanych zestawów',
+                  message: 'Tutaj pojawią się wszystkie zestawy fiszek, które zarchiwizujesz.',
+                );
+              },
+            ),
+          ],
+        ),
 
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
@@ -88,7 +130,7 @@ class _InitializedViewState extends State<InitializedView> {
   }
 
   /// Opens the [DeckDetails] modal.
-  Future<void> showDeckDetails(DeckViewModel deck) async {
+  Future<void> openDeck(DeckViewModel deck) async {
     await showModalBottomSheet(
       context: context,
 
@@ -101,9 +143,9 @@ class _InitializedViewState extends State<InitializedView> {
           },
 
           onDeletePressed: () async {
-            await deleteDeck(deck);
-
-            Navigator.pop(context);
+            if (await deleteDeck(deck)) {
+              Navigator.pop(context);
+            }
           },
 
           onExerciseSelected: (exercise) async {
@@ -122,21 +164,25 @@ class _InitializedViewState extends State<InitializedView> {
   }
 
   /// Opens the [DeckForm], allowing user to edit specified deck.
+  ///
+  /// The [replaceCurrentRoute] flag should be enabled if a bottom sheet is currently opened - this way the transition
+  /// is way smoother.
   Future<void> editDeck(DeckViewModel deck, {bool replaceCurrentRoute = false}) async {
     if (replaceCurrentRoute) {
-      await Navigator.pushReplacementNamed(context, 'decks--update', arguments: deck.deck);
+      await Navigator.pushReplacementNamed(context, 'decks--edit', arguments: deck.deck);
     } else {
-      await Navigator.pushNamed(context, 'decks--update', arguments: deck.deck);
+      await Navigator.pushNamed(context, 'decks--edit', arguments: deck.deck);
     }
 
     refresh();
   }
 
-  /// Asks the user whether they want to delete given deck and, if confirmed, actually deletes it.
-  Future<void> deleteDeck(DeckViewModel deck) async {
+  /// Asks user whether they want to delete given deck and, if confirmed, actually deletes it.
+  /// Returns a value indicating whether the deck was deleted or not.
+  Future<bool> deleteDeck(DeckViewModel deck) async {
     final confirmed = await confirm(
       context: context,
-      title: 'Usunąć fiszkę?',
+      title: 'Usunąć zestaw?',
       message: 'Czy chcesz usunąć ten zestaw fiszek?',
       btnYes: 'USUŃ',
       btnNo: 'NIE USUWAJ',
@@ -151,6 +197,8 @@ class _InitializedViewState extends State<InitializedView> {
 
       refresh();
     }
+
+    return confirmed;
   }
 
   /// Starts specified exercise.

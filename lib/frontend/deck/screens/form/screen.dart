@@ -15,7 +15,7 @@ class DeckFormScreen extends StatefulWidget {
       : formBehavior = DeckFormBehavior.createDeck,
         deck = DeckModel.create();
 
-  DeckFormScreen.updateDeck({
+  DeckFormScreen.editDeck({
     @required this.deck,
   })
       : formBehavior = DeckFormBehavior.editDeck,
