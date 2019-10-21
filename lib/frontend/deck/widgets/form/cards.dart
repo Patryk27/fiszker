@@ -43,29 +43,29 @@ class _DeckFormCardsSectionState extends State<DeckFormCardsSection> with Automa
       );
     }
 
-    final form = Column(
-      children: [
-        CardSearchField(
-          onChanged: (newQuery) {
-            setState(() {
-              query = newQuery;
-            });
-          },
-        ),
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CardSearchField(
+              onChanged: (newQuery) {
+                setState(() {
+                  query = newQuery;
+                });
+              },
+            ),
 
-        Expanded(
-          child: CardPopulatedList(
-            cards: getCards(),
+            CardPopulatedList(
+              cards: getCards(),
 
-            onCardTapped: (card) {
-              widget.onUpdateCardPressed(card);
-            },
-          ),
+              onCardTapped: (card) {
+                widget.onUpdateCardPressed(card);
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
-
-    return form;
   }
 
   /// Returns a filtered and sorted list of all the cards that will be displayed by this widget.
