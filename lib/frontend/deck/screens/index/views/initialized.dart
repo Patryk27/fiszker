@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fiszker/backend.dart';
 import 'package:fiszker/frontend.dart';
+import 'package:fiszker/frontend/deck/screens/index/views/initialized/deck_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc.dart';
@@ -37,6 +38,7 @@ class _InitializedViewState extends State<InitializedView> {
 
     return DefaultTabController(
       length: 3,
+
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Zestawy fiszek'),
@@ -87,42 +89,29 @@ class _InitializedViewState extends State<InitializedView> {
 
   /// Opens the [DeckDetails] modal.
   Future<void> showDeckDetails(DeckViewModel deck) async {
-    await showDialog(
+    await showModalBottomSheet(
       context: context,
+
       builder: (context) {
-        return DeckDetails(
+        return DeckBottomSheet(
           deck: deck,
 
-          onDeletePressed: () {
-            deleteDeck(deck);
+          onEditPressed: () async {
+            editDeck(deck, replaceCurrentRoute: true);
           },
 
-          onExercisePressed: () {
-            showExercises(deck);
+          onDeletePressed: () async {
+            await deleteDeck(deck);
+
+            Navigator.pop(context);
           },
 
-          onEditPressed: () {
-            editDeck(deck);
+          onExerciseSelected: (exercise) async {
+            startExercise(deck, exercise);
           },
         );
       },
     );
-  }
-
-  /// Opens the [ExerciseSelection] modal and navigates to selected exercise.
-  Future<void> showExercises(DeckViewModel deck) async {
-    final exercise = await showDialog(
-      context: context,
-      builder: (context) {
-        return ExerciseSelection();
-      },
-    );
-
-    if (exercise != null) {
-      await Navigator.pushNamed(context, 'exercises--$exercise', arguments: deck.deck);
-
-      refresh();
-    }
   }
 
   /// Opens the [DeckForm], allowing user to create a new deck.
@@ -133,13 +122,17 @@ class _InitializedViewState extends State<InitializedView> {
   }
 
   /// Opens the [DeckForm], allowing user to edit specified deck.
-  Future<void> editDeck(DeckViewModel deck) async {
-    await Navigator.pushNamed(context, 'decks--update', arguments: deck.deck);
+  Future<void> editDeck(DeckViewModel deck, {bool replaceCurrentRoute = false}) async {
+    if (replaceCurrentRoute) {
+      await Navigator.pushReplacementNamed(context, 'decks--update', arguments: deck.deck);
+    } else {
+      await Navigator.pushNamed(context, 'decks--update', arguments: deck.deck);
+    }
 
     refresh();
   }
 
-  /// Opens the
+  /// Asks the user whether they want to delete given deck and, if confirmed, actually deletes it.
   Future<void> deleteDeck(DeckViewModel deck) async {
     final confirmed = await confirm(
       context: context,
@@ -158,6 +151,17 @@ class _InitializedViewState extends State<InitializedView> {
 
       refresh();
     }
+  }
+
+  /// Starts specified exercise.
+  Future<void> startExercise(DeckViewModel deck, String exercise) async {
+    await Navigator.pushReplacementNamed(
+      context,
+      'exercises--$exercise',
+      arguments: deck.deck,
+    );
+
+    refresh();
   }
 
   /// Refreshes list of our decks.

@@ -1,16 +1,13 @@
 import 'package:fiszker/backend.dart';
 import 'package:flutter/material.dart';
 
-import 'details/actions.dart';
-import 'details/body.dart';
-
-class DeckDetails extends StatelessWidget {
+class DeckDetailsActions extends StatelessWidget {
   final DeckViewModel deck;
   final void Function() onDeletePressed;
   final void Function() onExercisePressed;
   final void Function() onEditPressed;
 
-  DeckDetails({
+  DeckDetailsActions({
     @required this.deck,
     @required this.onDeletePressed,
     @required this.onExercisePressed,
@@ -23,22 +20,25 @@ class DeckDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ButtonTheme.bar(
+      child: ButtonBar(
+        children: [
+          FlatButton(
+            child: const Text('USUŃ'),
+            onPressed: onDeletePressed,
+          ),
 
-      children: [
-        DeckDetailsBody(
-          deck: deck,
-        ),
+          FlatButton(
+            child: const Text('EDYTUJ'),
+            onPressed: onEditPressed,
+          ),
 
-        DeckDetailsActions(
-          deck: deck,
-          onDeletePressed: onDeletePressed,
-          onExercisePressed: onExercisePressed,
-          onEditPressed: onEditPressed,
-        ),
-      ],
+          FlatButton(
+            child: const Text('ĆWICZ'),
+            onPressed: onExercisePressed,
+          ),
+        ],
+      ),
     );
   }
 }
