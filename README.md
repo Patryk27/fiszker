@@ -15,12 +15,12 @@ there are no builds at GitHub, Google Play or AppStore. You can `git clone` the 
 
 ## Goals
 
-- Free as in "free beer"
-- Simple, performant, Material-Design-compliant interface
-- Server-free - everything's stored solely on users' phones
+- **Free** - as in "free beer"
+- **Simple**, performant, Material-Design-compliant interface
+- **Server-free** - everything's stored solely on users' phones
 - Android & iOS support
 
-## Pending tasks
+## Roadmap
 
 ### Before first release
 
