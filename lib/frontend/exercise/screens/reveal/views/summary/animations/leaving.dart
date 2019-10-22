@@ -20,8 +20,9 @@ class LeavingAnimation {
             .chain(CurveTween(curve: Curves.easeInOutQuad))
             .animate(_animationController);
 
+    // @todo the scaling animation seem to cause FPS issues on slower phones - investigate
     _scaleAnimation =
-        Tween(begin: 1.0, end: 2.0)
+        Tween(begin: 1.0, end: 1.5)
             .chain(CurveTween(curve: Curves.easeInOutQuad))
             .animate(_animationController);
   }
