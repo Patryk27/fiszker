@@ -25,19 +25,19 @@ there are no builds at GitHub, Google Play or AppStore. You can `git clone` the 
 
 ### Before first release
 
-- Get rid of all the current `@todo`s in both README and code
-- Write some tests
+- Add English translation
+- Get rid of all the to-dos in docs and code
+- Implement Leitner system learning model
 - Upload application to Google Play
+- Write some tests
 
 ### After first release
 
-- Add English translation
 - Implement more exercise types
 - Implement exercising statistics
 - Improve UI's interactivity (e.g. animate deleing a deck)
 - Optimize UI for tables (currently it's totally unprepared for landscape views)
 - Implement graphics cards
-- Implement learning models (like the Leitner system)
 - Implement syncing decks via Bluetooth (if it's possible at all)
 
 ## Architecture
