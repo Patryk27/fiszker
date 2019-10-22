@@ -51,6 +51,14 @@ class _ActiveViewState extends State<ActiveView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    /// Renders screen's close button.
+    Widget buildCloseButton() {
+      return IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: maybeDismiss,
+      );
+    }
+    
     /// Renders screen's body.
     Widget buildBody() {
       switch (status) {
@@ -111,6 +119,7 @@ class _ActiveViewState extends State<ActiveView> with TickerProviderStateMixin {
               onDoubleTap: maybeDismiss,
             ),
 
+            buildCloseButton(),
             buildBody(),
             buildProgressBar(),
           ],
