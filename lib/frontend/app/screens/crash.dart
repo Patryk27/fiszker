@@ -1,96 +1,63 @@
 import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
-class AppCrashScreen extends StatelessWidget {
-  AppCrashScreen({
-    @required this.errorMessage,
-  }) : assert(errorMessage != null);
+import 'crash/dump.dart';
+import 'crash/header.dart';
+import 'crash/icon.dart';
+import 'crash/subhead.dart';
 
-  final String errorMessage;
+class AppCrashScreen extends StatelessWidget {
+  final String dump;
+
+  AppCrashScreen({
+    @required this.dump,
+  }) : assert(dump != null);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: null,
-        title: const Text('Fiszker'),
-      ),
+    return WillPopScope(
+      // User might try to go back to the application by pressing the "back" key (if on Android) - we forbid that, since
+      // the previous screen might be in a particularly nasty, unusable state (it crashed for a reason, after all!)
+      onWillPop: () async {
+        return false;
+      },
 
-      body: Padding(
-        padding: const EdgeInsets.all(DIALOG_PADDING),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: null,
+          title: const Text('Fiszker'),
+        ),
 
-        child: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 60,
-                    color: Colors.red,
-                  ),
+        body: Padding(
+          padding: const EdgeInsets.all(DIALOG_PADDING),
 
-                  const SizedBox(height: 25),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
 
-                  const Text(
-                    'W Fiszkerze wystąpił błąd, przez co nie może on kontynuować działania.',
-
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  const Text(
-                    'Spróbuj uruchomić aplikację ponownie - jeśli błąd się powtórzy, śmiało pisz na: wychowaniec.patryk@gmail.com',
-
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CrashIcon(),
+                    const SizedBox(height: 25),
+                    const CrashHeader(),
+                    const SizedBox(height: 25),
+                    const CrashSubhead(),
+                  ],
+                ),
               ),
-            ),
 
-            const Divider(height: 80),
+              const Divider(height: 80),
 
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Błąd:',
-
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Text(
-                    errorMessage,
-
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w300,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              Expanded(
+                child: CrashDump(
+                  dump: dump,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
