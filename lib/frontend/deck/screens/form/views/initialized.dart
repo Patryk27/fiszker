@@ -15,11 +15,12 @@ class InitializedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void submit(DeckModel deck, List<CardModel> cards) {
+    void submit(DeckModel deck, List<BoxModel> boxes, List<CardModel> cards) {
       DeckFormBloc.of(context).add(
         Submit(
           formBehavior: state.formBehavior,
           deck: deck,
+          boxes: boxes,
           cards: cards,
         ),
       );
@@ -32,7 +33,6 @@ class InitializedView extends StatelessWidget {
     } else {
       return DeckForm.editDeck(
         deck: state.deck,
-        cards: state.cards,
         onSubmit: submit,
       );
     }

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'list/item.dart';
 
-class CardPopulatedList extends StatelessWidget {
+class CardList extends StatelessWidget {
   final List<CardModel> cards;
   final void Function(CardModel card) onCardTapped;
 
-  CardPopulatedList({
+  CardList({
     @required this.cards,
     @required this.onCardTapped,
   })
@@ -21,7 +21,7 @@ class CardPopulatedList extends StatelessWidget {
       shrinkWrap: true,
       itemCount: cards.length,
 
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         final card = cards[index];
 
         return CardListItem(

@@ -1,10 +1,8 @@
 import 'package:fiszker/backend.dart';
 import 'package:fiszker/frontend.dart' as frontend;
+import 'package:fiszker/frontend.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
-import 'package:timeago/timeago.dart' as timeago;
-
-import 'details/detail.dart';
 
 class DeckDetails extends StatelessWidget {
   final DeckViewModel deck;
@@ -28,28 +26,24 @@ class DeckDetails extends StatelessWidget {
     return frontend.BottomSheet(
       title: Optional.of(deck.deck.name),
 
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-
+      body: Details(
         children: [
-          DeckDetail(
+          // Number of cards
+          Detail(
             title: 'Liczba fiszek:',
-            value: deck.cards.length.toString(),
+            value: Optional.of(deck.cards.length.toString()),
           ),
 
-          const SizedBox(height: 20),
-
-          DeckDetail(
+          // Created at
+          Detail.ago(
             title: 'Utworzony:',
-            value: timeago.format(deck.deck.createdAt),
+            value: Optional.of(deck.deck.createdAt),
           ),
 
-          const SizedBox(height: 20),
-
-          DeckDetail(
+          // Exercised at
+          Detail.ago(
             title: 'Ostatnio ćwiczony:',
-            value: deck.deck.exercisedAt.map(timeago.format).orElse('-'),
+            value: deck.deck.exercisedAt,
           ),
         ],
       ),

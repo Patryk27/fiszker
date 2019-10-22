@@ -5,7 +5,7 @@ export 'repositories/in_memory.dart';
 export 'repositories/sqlite.dart';
 
 abstract class DeckRepository {
-  /// Adds given [deck] to the database.
+  /// Adds given [DeckModel] to the database.
   Future<void> add(DeckModel deck);
 
   /// Updates the [DeckModel.name] property of given deck.

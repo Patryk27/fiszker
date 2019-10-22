@@ -7,14 +7,14 @@ import 'deck/name.dart';
 /// This widgets models the "Deck" section of the [DeckForm] widget.
 class DeckFormDeckSection extends StatefulWidget {
   final DeckModel deck;
-  final void Function(DeckModel deck) onDeckUpdated;
+  final void Function(DeckModel deck) onDeckEdited;
 
   DeckFormDeckSection({
     @required this.deck,
-    @required this.onDeckUpdated,
+    @required this.onDeckEdited,
   })
       : assert(deck != null),
-        assert(onDeckUpdated != null);
+        assert(onDeckEdited != null);
 
   @override
   _DeckFormDeckSectionState createState() {
@@ -35,7 +35,7 @@ class _DeckFormDeckSectionState extends State<DeckFormDeckSection> {
         children: [
           DeckNameField(
             deck: widget.deck,
-            onChanged: widget.onDeckUpdated,
+            onChanged: widget.onDeckEdited,
           ),
         ],
       ),

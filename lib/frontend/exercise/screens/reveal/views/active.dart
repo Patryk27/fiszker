@@ -58,7 +58,7 @@ class _ActiveViewState extends State<ActiveView> with TickerProviderStateMixin {
         onPressed: maybeDismiss,
       );
     }
-    
+
     /// Renders screen's body.
     Widget buildBody() {
       switch (status) {
@@ -195,7 +195,7 @@ class _ActiveViewState extends State<ActiveView> with TickerProviderStateMixin {
 
     /// Initializes fields related to the "pending cards" and "answers" data.
     void initPendingCards() {
-      pendingCards = List.from(widget.state.deck.cards);
+      pendingCards = List.of(widget.state.deck.cards);
       pendingCards.shuffle();
 
       answers = Answers(

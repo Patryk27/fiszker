@@ -9,17 +9,14 @@ import '../views.dart';
 /// for user to either modify the form or press the "Submit" button.
 class InitializedState extends BlocState {
   final DeckFormBehavior formBehavior;
-  final DeckModel deck;
-  final List<CardModel> cards;
+  final DeckViewModel deck;
 
   InitializedState({
     @required this.formBehavior,
     @required this.deck,
-    @required this.cards
   })
       : assert(formBehavior != null),
-        assert(deck != null),
-        assert(cards != null);
+        assert(deck != null);
 
   @override
   Widget render() {

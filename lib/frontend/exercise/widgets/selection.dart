@@ -5,7 +5,7 @@ import 'package:optional/optional.dart';
 import 'selection/item.dart';
 
 class ExerciseSelection extends StatelessWidget {
-  final void Function(String) onExerciseSelected;
+  final void Function(String exercise) onExerciseSelected;
 
   ExerciseSelection({
     @required this.onExerciseSelected,
@@ -26,6 +26,7 @@ class ExerciseSelection extends StatelessWidget {
             description: 'Z zestawu zostaje wylosowana jedna karta, pokazywana jest Ci jej jedna strona, a Twoim zadaniem jest przypomnieć sobie zawartość drugiej.',
 
             onTapped: () {
+              // @todo make the exercises an enum
               onExerciseSelected('reveal');
             },
           ),

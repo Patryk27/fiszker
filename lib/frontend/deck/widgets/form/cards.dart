@@ -3,47 +3,44 @@ import 'package:fiszker/frontend.dart';
 import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'cards/empty_list.dart';
-import 'cards/populated_list.dart';
-import 'cards/search_field.dart';
+import 'cards/filter.dart';
 
 /// This widgets models the "Cards" section of the [DeckForm] widget.
-class DeckFormCardsSection extends StatefulWidget {
+class DeckFormCardsSection extends StatelessWidget {
+  /// List of all the deck's cards.
   final List<CardModel> cards;
-  final void Function() onCreateCardPressed;
-  final void Function(CardModel card) onUpdateCardPressed;
+
+  /// List of all the deck's boxes.
+  /// Used to filter cards when user requests so.
+  final List<BoxModel> boxes;
+
+  /// Controller for the searcher's text input.
+  final TextEditingController queryController;
+
+  /// Handler for the "create card" button.
+  final void Function() onCreateCard;
+
+  /// Handler for the "edit card" button.
+  final void Function(CardModel card) onEditCard;
 
   DeckFormCardsSection({
     @required this.cards,
-    @required this.onCreateCardPressed,
-    @required this.onUpdateCardPressed,
+    @required this.boxes,
+    @required this.queryController,
+    @required this.onCreateCard,
+    @required this.onEditCard,
   })
       : assert(cards != null),
-        assert(onCreateCardPressed != null),
-        assert(onUpdateCardPressed != null);
-
-  @override
-  _DeckFormCardsSectionState createState() {
-    return _DeckFormCardsSectionState();
-  }
-}
-
-class _DeckFormCardsSectionState extends State<DeckFormCardsSection> with AutomaticKeepAliveClientMixin {
-  String query = '';
-
-  /// We want this widget kept alive, so that the filtering (i.e. the [query] property) is preserved whenever user moves
-  /// through the form (e.g. when they switch to another tab and back here)
-  @override
-  bool get wantKeepAlive => true;
+        assert(boxes != null),
+        assert(queryController != null),
+        assert(onCreateCard != null),
+        assert(onEditCard != null);
 
   @override
   Widget build(BuildContext context) {
-    // To be kept alive, we must call our superclass first
-    super.build(context);
-
-    if (widget.cards.isEmpty) {
-      return CardEmptyList(
-        onCallToAction: widget.onCreateCardPressed,
+    if (cards.isEmpty) {
+      return EmptyCardList(
+        onCreateCardPressed: onCreateCard,
       );
     }
 
@@ -54,53 +51,23 @@ class _DeckFormCardsSectionState extends State<DeckFormCardsSection> with Automa
 
           child: Column(
             children: [
-              CardSearchField(
-                onChanged: (newQuery) {
-                  setState(() {
-                    query = newQuery;
-                  });
-                },
+              CardListSearcher(
+                controller: queryController,
               ),
 
-              CardPopulatedList(
-                cards: getCards(),
+              CardList(
+                cards: filterCards(
+                  cards: cards,
+                  boxes: boxes,
+                  query: queryController.text.trim(),
+                ),
 
-                onCardTapped: (card) {
-                  widget.onUpdateCardPressed(card);
-                },
+                onCardTapped: onEditCard,
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  /// Returns a filtered and sorted list of all the cards that will be displayed by this widget.
-  List<CardModel> getCards() {
-    var cards = widget.cards;
-
-    if (query.isNotEmpty) {
-      cards = cards
-          .where((card) => card.front.contains(query) || card.back.contains(query))
-          .toList();
-    }
-
-    cards.sort((a, b) {
-      final frontCmp = a.front.compareTo(b.front);
-      final backCmp = a.back.compareTo(b.back);
-
-      if (frontCmp != 0) {
-        return frontCmp;
-      }
-
-      if (backCmp != 0) {
-        return backCmp;
-      }
-
-      return a.id.compareTo(b.id);
-    });
-
-    return cards;
   }
 }

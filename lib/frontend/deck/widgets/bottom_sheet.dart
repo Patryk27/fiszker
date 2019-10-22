@@ -6,7 +6,7 @@ class DeckBottomSheet extends StatefulWidget {
   final DeckViewModel deck;
   final void Function() onEditPressed;
   final void Function() onDeletePressed;
-  final void Function(String) onExerciseSelected;
+  final void Function(String exercise) onExerciseSelected;
 
   DeckBottomSheet({
     @required this.deck,

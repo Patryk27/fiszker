@@ -6,15 +6,15 @@ class InMemoryDeckRepository implements DeckRepository {
 
   @override
   Future<void> add(DeckModel deck) async {
-    if (_decks.containsKey(deck.id)) {
-      throw 'repository already contains deck [id=${deck.id}]';
-    }
+    _assertNotExists(deck.id);
 
     _decks[deck.id] = deck.serialize();
   }
 
   @override
   Future<void> updateName(Id id, String name) async {
+    _assertExists(id);
+
     _decks.update(id, (deck) {
       return DeckModel
           .deserialize(deck)
@@ -25,6 +25,8 @@ class InMemoryDeckRepository implements DeckRepository {
 
   @override
   Future<void> updateStatus(Id id, DeckStatus status) async {
+    _assertExists(id);
+
     _decks.update(id, (deck) {
       return DeckModel
           .deserialize(deck)
@@ -35,6 +37,8 @@ class InMemoryDeckRepository implements DeckRepository {
 
   @override
   Future<void> updateExercisedAt(Id id, DateTime exercisedAt) async {
+    _assertExists(id);
+
     _decks.update(id, (deck) {
       return DeckModel
           .deserialize(deck)
@@ -60,6 +64,22 @@ class InMemoryDeckRepository implements DeckRepository {
 
   @override
   Future<void> remove(Id id) async {
+    _assertExists(id);
+
     _decks.remove(id);
+  }
+
+  /// Throws an exception if there's a deck with specified id in the database.
+  void _assertNotExists(Id id) {
+    if (_decks.containsKey(id)) {
+      throw 'repository already contains deck [id=$id]';
+    }
+  }
+
+  /// Throws an exception if there's no deck with specified id in the database.
+  void _assertExists(Id id) {
+    if (!_decks.containsKey(id)) {
+      throw 'repository does not contain deck [id=$id]';
+    }
   }
 }

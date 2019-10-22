@@ -3,9 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 
 class DeckModel extends Model {
+  /// Name of this deck.
+  /// Doesn't have to be unique.
   final String name;
+
+  /// Status of this deck.
   final DeckStatus status;
+
+  /// When this deck was created.
   final DateTime createdAt;
+
+  /// When this deck was exercised *for the last time*.
+  /// May be empty, if this is a newly-created deck that hasn't been yet used.
   final Optional<DateTime> exercisedAt;
 
   const DeckModel({

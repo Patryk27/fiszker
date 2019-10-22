@@ -18,13 +18,17 @@ void main() async {
   final databaseProvider = DatabaseProvider();
 
   // Initialize repositories
+  BoxRepository boxRepository;
   CardRepository cardRepository;
   DeckRepository deckRepository;
 
   if (DEBUG_ENABLE_IN_MEMORY_REPOSITORIES) {
+    boxRepository = InMemoryBoxRepository();
     cardRepository = InMemoryCardRepository();
     deckRepository = InMemoryDeckRepository();
   } else {
+    // @todo boxRepository
+
     cardRepository = SqliteCardRepository(
       databaseProvider: databaseProvider,
     );
@@ -35,36 +39,37 @@ void main() async {
   }
 
   // Initialize facades
+  final boxFacade = BoxFacade(
+    boxRepository: boxRepository,
+  );
+
   final cardFacade = CardFacade(
     cardRepository: cardRepository,
   );
 
   final deckFacade = DeckFacade(
     deckRepository: deckRepository,
+    boxFacade: boxFacade,
     cardFacade: cardFacade,
   );
 
   // Start the application
   runApp(Fiszker(
     databaseProvider: databaseProvider,
-    cardFacade: cardFacade,
     deckFacade: deckFacade,
   ));
 }
 
 class Fiszker extends StatelessWidget {
+  final DatabaseProvider databaseProvider;
+  final DeckFacade deckFacade;
+
   Fiszker({
     @required this.databaseProvider,
-    @required this.cardFacade,
     @required this.deckFacade,
   })
       : assert(databaseProvider != null),
-        assert(cardFacade != null),
         assert(deckFacade != null);
-
-  final DatabaseProvider databaseProvider;
-  final CardFacade cardFacade;
-  final DeckFacade deckFacade;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +124,7 @@ class Fiszker extends StatelessWidget {
 
         'app--crash': (context) {
           return AppCrashScreen(
-            errorMessage: ModalRoute
+            dump: ModalRoute
                 .of(context)
                 .settings
                 .arguments,

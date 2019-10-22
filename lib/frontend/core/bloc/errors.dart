@@ -31,10 +31,10 @@ class BlocErrorHandlerDelegate extends BlocDelegate {
     }
 
     // Build error message
-    String errorMessage = '';
+    String dump = '';
 
-    errorMessage += 'bloc = ${bloc.runtimeType.toString()}\n';
-    errorMessage += 'error = [${error.runtimeType.toString()}] ${error.toString()}\n';
+    dump += 'bloc = ${bloc.runtimeType.toString()}\n';
+    dump += 'error = [${error.runtimeType.toString()}] ${error.toString()}\n';
 
     // Open the "application has crashed" screen.
     // We're doing it after a delay, because it seems that Flutter has some troubles when navigation is changed during
@@ -42,7 +42,7 @@ class BlocErrorHandlerDelegate extends BlocDelegate {
     Future.delayed(const Duration(milliseconds: 500), () {
       AppNavigator.key.currentState.pushNamed(
         'app--crash',
-        arguments: errorMessage,
+        arguments: dump,
       );
     });
 

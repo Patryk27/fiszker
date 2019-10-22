@@ -4,27 +4,39 @@ import 'package:optional/optional.dart';
 
 @immutable
 class UpdateCardRequest {
-  final CardModel card;
+  /// Id of the [CardModel] to update.
+  final Id id;
+
+  /// If present, the card front's text will be updated to specified value.
   final Optional<String> front;
+
+  /// If present, the card back's text will be updated to specified value.
   final Optional<String> back;
 
   UpdateCardRequest({
-    @required this.card,
+    @required this.id,
     @required this.front,
     @required this.back,
   })
-      : assert(card != null),
+      : assert(id != null),
         assert(front != null),
         assert(back != null);
 
-  static UpdateCardRequest build({
+  /// Transforms given models into an [UpdateCardRequest].
+  static UpdateCardRequest fromModels({
     @required CardModel oldCard,
     @required CardModel newCard,
   }) {
     return UpdateCardRequest(
-      card: oldCard,
-      front: (newCard.front == oldCard.front) ? Optional.empty() : Optional.of(newCard.front),
-      back: (newCard.back == oldCard.back) ? Optional.empty() : Optional.of(newCard.back),
+      id: oldCard.id,
+
+      front: (newCard.front == oldCard.front)
+          ? Optional.empty()
+          : Optional.of(newCard.front),
+
+      back: (newCard.back == oldCard.back)
+          ? Optional.empty()
+          : Optional.of(newCard.back),
     );
   }
 }

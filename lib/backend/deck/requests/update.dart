@@ -4,30 +4,62 @@ import 'package:optional/optional.dart';
 
 @immutable
 class UpdateDeckRequest {
-  final DeckModel deck;
+  /// Id of the [DeckModel] to update.
+  final Id id;
+
+  /// If present, the deck's name will be updated to specified value.
   final Optional<String> name;
+
+  /// List of boxes that should be created alongside the deck.
+  final List<CreateBoxRequest> boxesToCreate;
+
+  /// List of boxes that should be updated alongside the deck.
+  final List<UpdateBoxRequest> boxesToUpdate;
+
+  /// List of boxes that should be deleted alongside the deck.
+  final List<BoxModel> boxesToDelete;
+
+  /// List of cards that should be created alongside the deck.
   final List<CreateCardRequest> cardsToCreate;
+
+  /// List of cards that should be updated alongside the deck.
   final List<UpdateCardRequest> cardsToUpdate;
+
+  /// List of cards that should be deleted alongside the deck.
   final List<CardModel> cardsToDelete;
 
   UpdateDeckRequest({
-    @required this.deck,
+    @required this.id,
     @required this.name,
+
+    @required this.boxesToCreate,
+    @required this.boxesToUpdate,
+    @required this.boxesToDelete,
+
     @required this.cardsToCreate,
     @required this.cardsToUpdate,
     @required this.cardsToDelete,
   })
-      : assert(deck != null),
+      : assert(id != null),
         assert(name != null),
+
+        assert(boxesToCreate != null),
+        assert(boxesToUpdate != null),
+        assert(boxesToDelete != null),
+
         assert(cardsToCreate != null),
         assert(cardsToUpdate != null),
         assert(cardsToDelete != null);
 
-  static UpdateDeckRequest build({
+  /// Transforms given models into an [UpdateDeckRequest].
+  static UpdateDeckRequest fromModels({
     @required DeckModel oldDeck,
-    @required List<CardModel> oldCards,
-
     @required DeckModel newDeck,
+
+    @required List<BoxModel> oldBoxes,
+    @required List<BoxModel> newBoxes,
+
+    @required List<CardModel> oldCards,
     @required List<CardModel> newCards,
   }) {
     final oldCardsMap = Map.fromIterable(
@@ -43,13 +75,13 @@ class UpdateDeckRequest {
     // Determine which cards should be created
     var cardsToCreate = newCards
         .where((newCard) => !oldCardsMap.containsKey(newCard.id))
-        .map((newCard) => CreateCardRequest.build(deckId: oldDeck.id, card: newCard))
+        .map((newCard) => CreateCardRequest.fromModel(card: newCard))
         .toList();
 
     // Determine which cards should be updated
     var cardsToUpdate = newCards
         .where((newCard) => oldCardsMap.containsKey(newCard.id))
-        .map((newCard) => UpdateCardRequest.build(oldCard: oldCardsMap[newCard.id], newCard: newCard))
+        .map((newCard) => UpdateCardRequest.fromModels(oldCard: oldCardsMap[newCard.id], newCard: newCard))
         .toList();
 
     // Determine which cards should be deleted
@@ -58,8 +90,21 @@ class UpdateDeckRequest {
         .toList();
 
     return UpdateDeckRequest(
-      deck: oldDeck,
-      name: (newDeck.name == oldDeck.name) ? Optional.empty() : Optional.of(newDeck.name),
+      id: oldDeck.id,
+
+      name: (newDeck.name == oldDeck.name)
+          ? Optional.empty()
+          : Optional.of(newDeck.name),
+
+      // @todo
+      boxesToCreate: [],
+
+      // @todo
+      boxesToUpdate: [],
+
+      // @todo
+      boxesToDelete: [],
+
       cardsToCreate: cardsToCreate,
       cardsToUpdate: cardsToUpdate,
       cardsToDelete: cardsToDelete,

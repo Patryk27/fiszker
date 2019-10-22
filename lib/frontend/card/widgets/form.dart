@@ -19,27 +19,33 @@ enum CardFormBehavior {
 /// and [onDelete] events.
 class CardForm extends StatefulWidget {
   final CardFormBehavior formBehavior;
+  final List<BoxModel> boxes;
   final CardModel card;
   final void Function(CardModel card) onSubmit;
-  final void Function(CardModel card) onDelete;
+  final void Function(CardModel card) onDelete; // @todo use Optional
 
-  /// Returns a form allowing to create a new flashcard.
+  /// Returns a [CardForm] configured to create a new flashcard.
   CardForm.createCard({
-    Id deckId,
+    @required this.boxes,
+    @required Id deckId,
+    @required Id boxId,
     @required this.onSubmit,
   })
       : formBehavior = CardFormBehavior.createCard,
-        card = CardModel.create(deckId: deckId),
+        assert(boxes != null),
+        card = CardModel.create(deckId: deckId, boxId: boxId),
         assert(onSubmit != null),
         onDelete = null;
 
-  /// Returns a form allowing to edit an existing flashcard.
+  /// Returns a [CardForm] configured to edit given flashcard.
   CardForm.editCard({
+    @required this.boxes,
     @required this.card,
     @required this.onSubmit,
     @required this.onDelete,
   })
       : formBehavior = CardFormBehavior.editCard,
+        assert(boxes != null),
         assert(card != null),
         assert(onSubmit != null),
         assert(onDelete != null);
@@ -51,10 +57,10 @@ class CardForm extends StatefulWidget {
 }
 
 class _CardFormState extends State<CardForm> {
-  _CardFormState(this.card);
-
   CardModel card;
   final formKey = GlobalKey<FormState>();
+
+  _CardFormState(this.card);
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +68,7 @@ class _CardFormState extends State<CardForm> {
     Widget buildBody() {
       return CardFormBody(
         formKey: formKey,
+        boxes: widget.boxes,
         card: card,
 
         onChanged: (card) {
@@ -102,9 +109,9 @@ class _CardFormState extends State<CardForm> {
 
       child: frontend.BottomSheet(
         title: Optional.of(
-            (widget.formBehavior == CardFormBehavior.createCard)
-                ? 'Tworzenie fiszki'
-                : 'Edycja fiszki'
+          (widget.formBehavior == CardFormBehavior.createCard)
+              ? 'Tworzenie fiszki'
+              : 'Edycja fiszki',
         ),
 
         body: buildBody(),

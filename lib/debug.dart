@@ -1,7 +1,6 @@
-/// If enabled, the in-memory repositories are enabled over the actual database ones - that is: all data will be lost
-/// after application's restarted.
+/// If enabled, the in-memory repositories are enabled over the actual database ones.
 /// Useful for debugging purposes only.
-const DEBUG_ENABLE_IN_MEMORY_REPOSITORIES = false;
+const DEBUG_ENABLE_IN_MEMORY_REPOSITORIES = true;
 
 /// If enabled, all BLoC events will be print()-ed to the standard output.
 /// Useful for debugging purposes only.

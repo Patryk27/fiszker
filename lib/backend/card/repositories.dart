@@ -4,7 +4,7 @@ export 'repositories/in_memory.dart';
 export 'repositories/sqlite.dart';
 
 abstract class CardRepository {
-  /// Adds given [card] to the database.
+  /// Adds given [CardModel] to the database.
   Future<void> add(CardModel card);
 
   /// Updates the [CardModel.front] property of given card.

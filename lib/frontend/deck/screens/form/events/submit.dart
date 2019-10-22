@@ -11,15 +11,18 @@ import '../states.dart';
 class Submit extends BlocEvent {
   final DeckFormBehavior formBehavior;
   final DeckModel deck;
+  final List<BoxModel> boxes;
   final List<CardModel> cards;
 
   Submit({
     @required this.formBehavior,
     @required this.deck,
+    @required this.boxes,
     @required this.cards,
   })
       : assert(formBehavior != null),
         assert(deck != null),
+        assert(boxes != null),
         assert(cards != null);
 
   @override
@@ -30,19 +33,23 @@ class Submit extends BlocEvent {
 
     switch (formBehavior) {
       case DeckFormBehavior.createDeck:
-        await deckFacade.create(CreateDeckRequest.build(
+        await deckFacade.create(CreateDeckRequest.fromModels(
           deck: deck,
+          boxes: boxes,
           cards: cards,
         ));
 
         break;
 
       case DeckFormBehavior.editDeck:
-        await deckFacade.update(UpdateDeckRequest.build(
+        await deckFacade.update(UpdateDeckRequest.fromModels(
           oldDeck: await deckFacade.findById(deck.id),
-          oldCards: await deckFacade.findCards(deck),
-
           newDeck: deck,
+
+          oldBoxes: await deckFacade.findBoxes(deck),
+          newBoxes: boxes,
+
+          oldCards: await deckFacade.findCards(deck),
           newCards: cards,
         ));
 

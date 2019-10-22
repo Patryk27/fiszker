@@ -1,19 +1,23 @@
 import 'package:fiszker/backend.dart';
 import 'package:flutter/material.dart';
 
-import 'body/card_side.dart';
+import 'body/box_field.dart';
+import 'body/side_field.dart';
 
 class CardFormBody extends StatelessWidget {
   final GlobalKey<FormState> formKey;
+  final List<BoxModel> boxes;
   final CardModel card;
   final void Function(CardModel card) onChanged;
 
   CardFormBody({
     @required this.formKey,
+    @required this.boxes,
     @required this.card,
     @required this.onChanged,
   })
       : assert(formKey != null),
+        assert(boxes != null),
         assert(card != null),
         assert(onChanged != null);
 
@@ -24,7 +28,8 @@ class CardFormBody extends StatelessWidget {
 
       child: Column(
         children: [
-          CardSide(
+          // Card's front
+          CardSideField(
             title: 'Treść awersu',
             hint: 'np.: cztery ostatnie cyfry Pi',
             value: card.front,
@@ -39,7 +44,8 @@ class CardFormBody extends StatelessWidget {
 
           const SizedBox(height: 15),
 
-          CardSide(
+          // Card's back
+          CardSideField(
             title: 'Treść rewersu',
             hint: 'np.: 042',
             value: card.back,
@@ -48,6 +54,20 @@ class CardFormBody extends StatelessWidget {
             onChanged: (back) {
               onChanged(card.copyWith(
                 back: back,
+              ));
+            },
+          ),
+
+          const SizedBox(height: 15),
+
+          // Card's box
+          CardBoxField(
+            boxes: boxes,
+            value: card.boxId,
+
+            onChanged: (boxId) {
+              onChanged(card.copyWith(
+                boxId: boxId,
               ));
             },
           ),

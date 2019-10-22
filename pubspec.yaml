@@ -9,12 +9,13 @@ dependencies:
   equatable: ^0.6.1
   fl_chart: ^0.3.4
   flutter: { sdk: flutter }
-  flutter_bloc: ^0.22.1
+  flutter_bloc: ^1.0.0
+  flutter_speed_dial: ^1.2.3
   optional: ^3.1.0
   path: ^1.6.4
   quiver: '>=2.0.0 <3.0.0'
   sqflite: ^1.1.7+1
-  timeago: ^2.0.20
+  timeago: ^2.0.21
   uuid: ^2.0.2
 
 dev_dependencies:

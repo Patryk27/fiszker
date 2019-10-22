@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
-class DeckDetail extends StatelessWidget {
+class Detail extends StatelessWidget {
   final String title;
-  final String value;
+  final Optional<String> value;
 
-  DeckDetail({
+  Detail({
     @required this.title,
     @required this.value,
   })
       : assert(title != null),
         assert(value != null);
+
+  Detail.ago({
+    @required this.title,
+    @required Optional<DateTime> value,
+  }) : value = value.map(timeago.format);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,8 @@ class DeckDetail extends StatelessWidget {
         Text(title),
 
         Text(
-          value,
+          value.orElse('-'),
+
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
