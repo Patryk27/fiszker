@@ -1,75 +1,63 @@
 import 'package:bloc/bloc.dart';
+import 'package:fiszker/database.dart';
 import 'package:fiszker/debug.dart';
 import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'backend.dart';
-import 'frontend.dart';
+import 'domain.dart';
+import 'i18n.dart' as i18n;
+import 'ui.dart';
 
 void main() async {
   BlocSupervisor.delegate = BlocErrorHandlerDelegate();
+  i18n.inflector = i18n.PolishInflector();
 
-  // Initialize timeago
+  // ================== //
+  // Initialize vendors //
   timeago.setLocaleMessages('en', timeago.PlMessages());
 
-  // Initialize database provider
+  // =================== //
+  // Initialize database //
   final databaseProvider = DatabaseProvider();
 
-  // Initialize repositories
-  BoxRepository boxRepository;
-  CardRepository cardRepository;
-  DeckRepository deckRepository;
+  BoxStorage boxStorage;
+  CardStorage cardStorage;
+  DeckStorage deckStorage;
 
   if (DEBUG_ENABLE_IN_MEMORY_REPOSITORIES) {
-    boxRepository = InMemoryBoxRepository();
-    cardRepository = InMemoryCardRepository();
-    deckRepository = InMemoryDeckRepository();
+    boxStorage = InMemoryBoxStorage();
+    cardStorage = InMemoryCardsStorage();
+    deckStorage = InMemoryDeckStorage();
   } else {
-    // @todo boxRepository
-
-    cardRepository = SqliteCardRepository(
-      databaseProvider: databaseProvider,
-    );
-
-    deckRepository = SqliteDeckRepository(
-      databaseProvider: databaseProvider,
-    );
+    boxStorage = SqliteBoxStorage(databaseProvider);
+    cardStorage = SqliteCardStorage(databaseProvider);
+    deckStorage = SqliteDeckStorage(databaseProvider);
   }
 
-  // Initialize facades
-  final boxFacade = BoxFacade(
-    boxRepository: boxRepository,
-  );
+  // ================= //
+  // Initialize domain //
+  final deckFacade = DeckFacade.build(boxStorage, cardStorage, deckStorage);
+  final exerciseFacade = ExerciseFacade(boxStorage, cardStorage, deckStorage);
 
-  final cardFacade = CardFacade(
-    cardRepository: cardRepository,
+  // ==================== //
+  // Start the application //
+  runApp(
+    Fiszker(
+      databaseProvider,
+      deckFacade,
+      exerciseFacade,
+    ),
   );
-
-  final deckFacade = DeckFacade(
-    deckRepository: deckRepository,
-    boxFacade: boxFacade,
-    cardFacade: cardFacade,
-  );
-
-  // Start the application
-  runApp(Fiszker(
-    databaseProvider: databaseProvider,
-    deckFacade: deckFacade,
-  ));
 }
 
 class Fiszker extends StatelessWidget {
   final DatabaseProvider databaseProvider;
   final DeckFacade deckFacade;
+  final ExerciseFacade exerciseFacade;
 
-  Fiszker({
-    @required this.databaseProvider,
-    @required this.deckFacade,
-  })
-      : assert(databaseProvider != null),
-        assert(deckFacade != null);
+  Fiszker(this.databaseProvider, this.deckFacade, this.exerciseFacade);
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +146,7 @@ class Fiszker extends StatelessWidget {
         'decks--edit': (context) {
           return BlocProvider<DeckFormBloc>(
             child: DeckFormScreen.editDeck(
-              deck: ModalRoute
+              deckId: ModalRoute
                   .of(context)
                   .settings
                   .arguments,
@@ -173,17 +161,18 @@ class Fiszker extends StatelessWidget {
         },
 
         'exercises--reveal': (context) {
-          return BlocProvider<ExerciseRevealBloc>(
-            child: ExerciseRevealScreen(
-              deck: ModalRoute
+          return BlocProvider<RevealExerciseBloc>(
+            child: RevealExerciseScreen(
+              deckId: ModalRoute
                   .of(context)
                   .settings
                   .arguments,
             ),
 
             builder: (context) {
-              return ExerciseRevealBloc(
+              return RevealExerciseBloc(
                 deckFacade: deckFacade,
+                exerciseFacade: exerciseFacade,
               );
             },
           );

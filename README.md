@@ -17,7 +17,7 @@ there are no builds at GitHub, Google Play or AppStore. You can `git clone` the 
 ## Goals
 
 - **Free** - as in "free beer"
-- **Simple**, performant, Material-Design-compliant interface
+- **Simple**, elegant, Material Design interface
 - **Server-free** - everything's stored solely on users' phones
 - Android & iOS support
 

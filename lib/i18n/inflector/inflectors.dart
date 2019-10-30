@@ -1,0 +1,1 @@
+export 'inflectors/polish.dart';
