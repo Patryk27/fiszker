@@ -16,7 +16,7 @@ Future<bool> confirm({
 
     actions: [
       Tuple2(false, noLabel),
-      Tuple2(false, yesLabel),
+      Tuple2(true, yesLabel),
     ],
 
     defaultResult: false,
