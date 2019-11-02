@@ -19,8 +19,8 @@ class CardListItem extends StatelessWidget {
         onTap: onTapped,
 
         child: ListTile(
-          title: Text(card.front),
-          subtitle: Text(card.back),
+          title: Text(card.front, overflow: TextOverflow.ellipsis),
+          subtitle: Text(card.back, overflow: TextOverflow.ellipsis),
           trailing: const Icon(Icons.edit),
         ),
       ),
