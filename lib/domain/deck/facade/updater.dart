@@ -34,6 +34,7 @@ class DeckUpdater {
 
     await deckStorage.update(newDeck.id,
       name: diff(oldDeck.name, newDeck.name),
+      status: diff(oldDeck.status, newDeck.status),
     );
   }
 

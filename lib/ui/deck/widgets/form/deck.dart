@@ -3,6 +3,7 @@ import 'package:fiszker/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'deck/name.dart';
+import 'deck/status.dart';
 
 /// This widget models the "Deck" section of the [DeckForm] widget.
 class DeckFormDeckSection extends StatefulWidget {
@@ -32,6 +33,13 @@ class _DeckFormDeckSectionState extends State<DeckFormDeckSection> {
 
         children: [
           DeckNameField(
+            deck: widget.deck,
+            onChanged: widget.onDeckEdited,
+          ),
+
+          const SizedBox(height: 15),
+
+          DeckStatusField(
             deck: widget.deck,
             onChanged: widget.onDeckEdited,
           ),
