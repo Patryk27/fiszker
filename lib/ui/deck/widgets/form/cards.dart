@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'cards/filter.dart';
 
-/// This widgets models the "Cards" section of the [DeckForm] widget.
+/// This widget models the "Cards" section of the [DeckForm] widget.
 class DeckFormCardsSection extends StatelessWidget {
   /// List of all the deck's cards.
   final List<CardModel> cards;

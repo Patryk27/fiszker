@@ -17,7 +17,7 @@ enum CardFormBehavior {
   editCard,
 }
 
-/// This widgets models a bottom sheet responsible for creating and editing single cards.
+/// This widget models a bottom sheet responsible for creating and editing single cards.
 /// It's a part of the [DeckForm], which is generally used to create and edit decks, their boxes and cards.
 ///
 /// # Safety

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'deck/name.dart';
 
-/// This widgets models the "Deck" section of the [DeckForm] widget.
+/// This widget models the "Deck" section of the [DeckForm] widget.
 class DeckFormDeckSection extends StatefulWidget {
   final DeckModel deck;
   final void Function(DeckModel deck) onDeckEdited;

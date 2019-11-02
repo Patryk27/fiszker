@@ -2,7 +2,7 @@ import 'package:fiszker/database.dart';
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
-/// This widgets models the "Boxes" section of the [DeckForm] widget.
+/// This widget models the "Boxes" section of the [DeckForm] widget.
 class DeckFormBoxesSection extends StatefulWidget {
   final List<BoxModel> boxes;
   final List<CardModel> cards;
