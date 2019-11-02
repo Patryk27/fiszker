@@ -30,25 +30,25 @@ class _ExerciseModeDropdownState extends State<ExerciseModeDropdown> {
         // Oldest ten cards
         DropdownMenuItem(
           value: ExerciseMode.oldestTenCards,
-          child: const Text('Najstarsze 10 fiszek z pudełka'),
+          child: const Text('Powtórz 10 fiszek'),
         ),
 
         // Oldest twenty cards
         DropdownMenuItem(
           value: ExerciseMode.oldestTwentyCards,
-          child: const Text('Najstarsze 20 fiszek z pudełka'),
+          child: const Text('Powtórz 20 fiszek'),
         ),
 
         // Oldest fifty cards
         DropdownMenuItem(
           value: ExerciseMode.oldestFiftyCards,
-          child: const Text('Najstarsze 50 fiszek z pudełka'),
+          child: const Text('Powtórz 50 fiszek'),
         ),
 
         // All cards
         DropdownMenuItem(
           value: ExerciseMode.allCards,
-          child: const Text('Wszystkie fiszki z pudełka'),
+          child: const Text('Powtórz wszystkie fiszki'),
         ),
       ],
 
