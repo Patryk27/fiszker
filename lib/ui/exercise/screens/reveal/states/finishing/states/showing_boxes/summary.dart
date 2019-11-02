@@ -42,7 +42,7 @@ class BoxesSummary extends StatelessWidget {
   }
 
   Optional<List<TextSpan>> describeCorrectAnswers(Exercise exercise) {
-    final answers = 1; // exercise.countCorrectAnswers();
+    final answers = exercise.countCorrectAnswers();
     final targetBox = exercise.getCorrectAnswersBox();
 
     if (answers == 0) {
