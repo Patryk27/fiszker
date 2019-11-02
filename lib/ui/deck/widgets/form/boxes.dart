@@ -1,4 +1,5 @@
 import 'package:fiszker/database.dart';
+import 'package:fiszker/theme.dart';
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
@@ -43,11 +44,15 @@ class _DeckFormBoxesSectionState extends State<DeckFormBoxesSection> {
       return boxA.index.compareTo(boxB.index);
     });
 
-    return BoxList(
-      boxes: boxes,
-      cards: widget.cards,
-      onBoxTapped: widget.onShowBox,
-      onBoxMoved: widget.onMoveBox,
+    return Padding(
+      padding: const EdgeInsets.all(TAB_VIEW_PADDING),
+
+      child: BoxList(
+        boxes: boxes,
+        cards: widget.cards,
+        onBoxTapped: widget.onShowBox,
+        onBoxMoved: widget.onMoveBox,
+      ),
     );
   }
 }
