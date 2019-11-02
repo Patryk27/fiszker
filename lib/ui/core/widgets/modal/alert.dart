@@ -26,6 +26,7 @@ class AlertModal extends StatelessWidget {
 
     return Dialog(
       backgroundColor: Colors.transparent,
+      elevation: 0.0,
 
       child: ClipRRect(
         borderRadius: BorderRadius.all(
