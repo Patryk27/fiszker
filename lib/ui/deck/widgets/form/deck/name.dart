@@ -1,6 +1,9 @@
 import 'package:fiszker/database.dart';
+import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
+/// This widget models the "Deck name" form field.
+/// It's a part of the [DeckForm], not meant for standalone use.
 class DeckNameField extends StatefulWidget {
   final DeckModel deck;
   final void Function(DeckModel deck) onChanged;
@@ -17,13 +20,13 @@ class DeckNameField extends StatefulWidget {
 }
 
 class _DeckNameFieldState extends State<DeckNameField> {
-  final textController = TextEditingController();
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       autofocus: widget.deck.name.isEmpty,
-      controller: textController,
+      controller: controller,
 
       decoration: const InputDecoration(
         labelText: 'Nazwa',
@@ -48,11 +51,11 @@ class _DeckNameFieldState extends State<DeckNameField> {
   void initState() {
     super.initState();
 
-    textController.text = widget.deck.name;
+    controller.text = widget.deck.name;
 
-    textController.addListener(() {
+    controller.addListener(() {
       final deck = widget.deck.copyWith(
-        name: textController.text.trim(),
+        name: controller.text.trim(),
       );
 
       widget.onChanged(deck);
@@ -61,7 +64,7 @@ class _DeckNameFieldState extends State<DeckNameField> {
 
   @override
   void dispose() {
-    textController.dispose();
+    controller.dispose();
 
     super.dispose();
   }
