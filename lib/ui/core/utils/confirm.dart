@@ -1,5 +1,6 @@
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 Future<bool> confirm({
   @required BuildContext context,
@@ -8,35 +9,16 @@ Future<bool> confirm({
   String yesLabel = 'TAK',
   String noLabel = 'NIE',
 }) async {
-  return await showDialog(
+  return await confirmEx(
     context: context,
-    builder: (context) {
-      return AlertModal(
-        title: title,
-        message: message,
+    title: title,
+    message: message,
 
-        actions: [
-          FlatButton(
-            child: Text(noLabel),
+    actions: [
+      Tuple2(false, noLabel),
+      Tuple2(false, yesLabel),
+    ],
 
-            onPressed: () {
-              Navigator
-                  .of(context)
-                  .pop(false);
-            },
-          ),
-
-          FlatButton(
-            child: Text(yesLabel),
-
-            onPressed: () {
-              Navigator
-                  .of(context)
-                  .pop(true);
-            },
-          ),
-        ],
-      );
-    },
-  ) ?? false;
+    defaultResult: false,
+  );
 }

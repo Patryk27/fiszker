@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:optional/optional.dart';
+import 'package:tuple/tuple.dart';
 
 import 'form/boxes.dart';
 import 'form/cards.dart';
@@ -406,17 +407,34 @@ class _DeckFormState extends State<DeckForm> with SingleTickerProviderStateMixin
       return true;
     }
 
-    return await confirm(
+    final action = await confirmEx(
       context: context,
 
-      title: 'Porzucić zestaw?',
-      noLabel: 'WRÓĆ',
-      yesLabel: 'PORZUĆ ZMIANY',
+      title: 'Zapisać zmiany?',
+      message: 'Zestaw zawiera niezapisane zmiany - czy chcesz je zapisać?',
 
-      message: (widget.formBehavior == DeckFormBehavior.createDeck)
-          ? 'Czy chcesz porzucić tworzenie tego zestawu?\nStracisz niezapisane zmiany.'
-          : 'Czy chcesz porzucić edycję tego zestawu?\nStracisz niezapisane zmiany.',
+      actions: [
+        Tuple2('dismiss', 'WRÓĆ'),
+        Tuple2('discard', 'PORZUĆ'),
+        Tuple2('save', 'ZAPISZ'),
+      ],
+
+      defaultResult: 'dismiss',
     );
+
+    switch (action) {
+      case 'dismiss':
+        return false;
+
+      case 'discard':
+        return true;
+
+      case 'save':
+        submit();
+        return false;
+    }
+
+    throw 'unreachable';
   }
 
   /// Asks user whether they want to close this form and, if confirmed, actually closes it.

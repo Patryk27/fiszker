@@ -3,6 +3,7 @@ import 'package:fiszker/ui.dart' as frontend;
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
+import 'package:tuple/tuple.dart';
 
 import 'form/body.dart';
 
@@ -151,22 +152,39 @@ class _CardFormState extends State<CardForm> {
 
   /// Asks user whether they want to close this form (if it's dirty) and returns the confirmation's result.
   Future<bool> confirmClose() async {
-    // Let's not bother asking user if the form's not dirty
+    // If the form's not dirty, let's not even bother asking user
     if (!isDirty()) {
       return true;
     }
 
-    return await confirm(
+    final action = await confirmEx(
       context: context,
 
-      title: 'Porzucić fiszkę?',
-      noLabel: 'WRÓĆ',
-      yesLabel: 'PORZUĆ ZMIANY',
+      title: 'Zapisać zmiany?',
+      message: 'Fiszka zawiera niezapisane zmiany - czy chcesz je zapisać?',
 
-      message: (widget.formBehavior == CardFormBehavior.createCard)
-          ? 'Czy chcesz porzucić tworzenie tej fiszki?'
-          : 'Czy chcesz porzucić edycję tej fiszki?',
+      actions: [
+        Tuple2('dismiss', 'WRÓĆ'),
+        Tuple2('discard', 'PORZUĆ'),
+        Tuple2('save', 'ZAPISZ'),
+      ],
+
+      defaultResult: 'dismiss',
     );
+
+    switch (action) {
+      case 'dismiss':
+        return false;
+
+      case 'discard':
+        return true;
+
+      case 'save':
+        submit();
+        return false;
+    }
+
+    throw 'unreachable';
   }
 
   /// Asks user whether they want to close this form and, if confirmed, actually closes it.

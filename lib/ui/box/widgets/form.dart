@@ -3,6 +3,7 @@ import 'package:fiszker/ui.dart' as frontend;
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
+import 'package:tuple/tuple.dart';
 
 import 'form/actions.dart';
 import 'form/body.dart';
@@ -152,17 +153,34 @@ class _BoxFormState extends State<BoxForm> {
       return true;
     }
 
-    return await confirm(
+    final action = await confirmEx(
       context: context,
 
-      title: 'Porzucić pudełko?',
-      noLabel: 'WRÓĆ',
-      yesLabel: 'PORZUĆ ZMIANY',
+      title: 'Zapisać zmiany?',
+      message: 'Pudełko zawiera niezapisane zmiany - czy chcesz je zapisać?',
 
-      message: (widget.formBehavior == BoxFormBehavior.createBox)
-          ? 'Czy chcesz porzucić tworzenie tego pudełka?'
-          : 'Czy chcesz porzucić edycję tego pudełka?',
+      actions: [
+        Tuple2('dismiss', 'WRÓĆ'),
+        Tuple2('discard', 'PORZUĆ'),
+        Tuple2('save', 'ZAPISZ'),
+      ],
+
+      defaultResult: 'dismiss',
     );
+
+    switch (action) {
+      case 'dismiss':
+        return false;
+
+      case 'discard':
+        return true;
+
+      case 'save':
+        submit();
+        return false;
+    }
+
+    throw 'unreachable';
   }
 
   /// Asks user whether they want to close this form and, if confirmed, actually closes it.
