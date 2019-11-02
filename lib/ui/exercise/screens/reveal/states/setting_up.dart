@@ -64,7 +64,7 @@ class _WidgetState extends State<_Widget> {
             },
           ),
 
-          const SizedBox(height: 35),
+          const SizedBox(height: 45),
 
           SettingUpStartButton(
             onPressed: () {
