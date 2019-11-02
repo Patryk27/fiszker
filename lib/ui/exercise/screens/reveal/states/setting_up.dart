@@ -5,6 +5,9 @@ import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc.dart';
+import 'setting_up/form.dart';
+import 'setting_up/start_button.dart';
+import 'setting_up/title.dart';
 
 class SettingUp extends RevealExerciseBlocState {
   final DeckEntity deck;
@@ -39,33 +42,40 @@ class _WidgetState extends State<_Widget> {
         mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
-          // "Select box" field
-          ExerciseBoxDropdown(
-            deck: widget.deck,
-            onChanged: handleBoxChanged,
-          ),
-
-          const SizedBox(height: 15),
-
-          // "Select mode" field
-          ExerciseModeDropdown(
-            onChanged: handleModeChanged,
-          ),
+          SettingUpTitle(),
 
           const SizedBox(height: 25),
 
-          // "Start" button
-          RaisedButton(
-            child: const Padding(
-              padding: const EdgeInsets.all(20),
-              child: const Text('ROZPOCZNIJ'),
-            ),
+          SettingUpForm(
+            deck: widget.deck,
+            box: selectedBox,
+            mode: selectedMode,
 
-            color: Theme
-                .of(context)
-                .primaryColor,
+            onBoxChanged: (box) {
+              setState(() {
+                selectedBox = box;
+              });
+            },
 
-            onPressed: handleStartPressed,
+            onModeChanged: (mode) {
+              setState(() {
+                selectedMode = mode;
+              });
+            },
+          ),
+
+          const SizedBox(height: 35),
+
+          SettingUpStartButton(
+            onPressed: () {
+              RevealExerciseBloc.of(context).add(
+                Start(
+                  deck: widget.deck,
+                  box: selectedBox,
+                  mode: selectedMode,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -76,26 +86,10 @@ class _WidgetState extends State<_Widget> {
   void initState() {
     super.initState();
 
-    selectedBox = widget.deck.boxes[0];
-  }
+    selectedBox = widget.deck
+        .findOccupiedBoxes()
+        .first;
 
-  void handleBoxChanged(BoxModel box) {
-    // No need to invoke `setState()` here, since the `selectedBox` field is not directly bound to any widget
-    selectedBox = box;
-  }
-
-  void handleModeChanged(ExerciseMode mode) {
-    // No need to invoke `setState()` here, since the `selectedMode` field is not directly bound to any widget
-    selectedMode = mode;
-  }
-
-  void handleStartPressed() {
-    RevealExerciseBloc.of(context).add(
-      Start(
-        deck: widget.deck,
-        box: selectedBox,
-        mode: selectedMode,
-      ),
-    );
+    selectedMode = ExerciseMode.oldestTenCards;
   }
 }

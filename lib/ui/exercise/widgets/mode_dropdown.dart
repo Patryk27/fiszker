@@ -2,24 +2,25 @@ import 'package:fiszker/domain.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseModeDropdown extends StatefulWidget {
+  final ExerciseMode value;
   final void Function(ExerciseMode value) onChanged;
 
   ExerciseModeDropdown({
+    @required this.value,
     @required this.onChanged,
-  }) : assert(onChanged != null);
+  })
+      : assert(value != null),
+        assert(onChanged != null);
 
   @override
   State<ExerciseModeDropdown> createState() => _ExerciseModeDropdownState();
 }
 
 class _ExerciseModeDropdownState extends State<ExerciseModeDropdown> {
-  /// Currently selected mode.
-  ExerciseMode value = ExerciseMode.oldestTenCards;
-
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      value: value,
+      value: widget.value,
 
       decoration: InputDecoration(
         labelText: 'Wybierz tryb',
@@ -52,20 +53,7 @@ class _ExerciseModeDropdownState extends State<ExerciseModeDropdown> {
         ),
       ],
 
-      onChanged: (value) {
-        setState(() {
-          this.value = value;
-        });
-
-        widget.onChanged(value);
-      },
+      onChanged: widget.onChanged,
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    widget.onChanged(value);
   }
 }

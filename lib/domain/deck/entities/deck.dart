@@ -47,6 +47,13 @@ class DeckEntity {
     return findCardsInsideBox(box).length;
   }
 
+  /// Returns a list of all the boxes that contain at least one card.
+  List<BoxModel> findOccupiedBoxes() {
+    return boxes
+        .where((box) => countCardsInsideBox(box) > 0)
+        .toList();
+  }
+
   /// Returns predecessor of specified box, i.e.: such box that its index is `box.index - 1`.
   /// Returns nothing if no such box exists.
   Optional<BoxModel> findBoxPredecessor(BoxModel box) {

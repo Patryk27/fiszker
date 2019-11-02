@@ -2,19 +2,21 @@ import 'package:fiszker/database.dart';
 import 'package:fiszker/domain.dart';
 import 'package:fiszker/i18n.dart';
 import 'package:flutter/material.dart';
-import 'package:optional/optional.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// This widget models a [DropdownButtonFormField] that enables user to choose which deck they want to exercise.
 class ExerciseBoxDropdown extends StatefulWidget {
   final DeckEntity deck;
+  final BoxModel value;
   final void Function(BoxModel value) onChanged;
 
   ExerciseBoxDropdown({
     @required this.deck,
+    @required this.value,
     @required this.onChanged,
   })
       : assert(deck != null),
+        assert(value != null),
         assert(onChanged != null);
 
   @override
@@ -22,57 +24,25 @@ class ExerciseBoxDropdown extends StatefulWidget {
 }
 
 class _ExerciseBoxDropdownState extends State<ExerciseBoxDropdown> {
-  Optional<BoxModel> value = const Optional.empty();
-  List<DropdownMenuItem> items;
-
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      value: value.orElse(null),
-      items: items,
+      value: widget.value,
+      onChanged: widget.onChanged,
 
       decoration: InputDecoration(
         labelText: 'Wybierz pudełko',
         alignLabelWithHint: true,
       ),
 
-      onChanged: (value) {
-        setState(() {
-          this.value = Optional.of(value);
-        });
-
-        widget.onChanged(value);
-      },
+      items: widget.deck
+          .findOccupiedBoxes()
+          .map(buildItem)
+          .toList(),
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    items = buildItems();
-
-    if (items.isNotEmpty) {
-      value = Optional.of(items[0].value);
-      widget.onChanged(value.value);
-    }
-  }
-
-  List<DropdownMenuItem> buildItems() {
-    var boxes = widget.deck.boxes;
-
-    // Skip over all the empty boxes
-    boxes = boxes.where((box) {
-      return widget.deck.countCardsInsideBox(box) > 0;
-    }).toList();
-
-    // Build items
-    return boxes
-        .map(buildItem)
-        .toList();
-  }
-
-  DropdownMenuItem buildItem(BoxModel box) {
+  DropdownMenuItem<BoxModel> buildItem(BoxModel box) {
     final cards = inflector.pluralize(
       InflectorVerb.flashcard,
       InflectorCase.nominative,
