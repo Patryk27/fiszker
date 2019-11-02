@@ -21,7 +21,7 @@ class SqliteDeckStorage extends SqliteStorage implements DeckStorage {
     });
 
     status.ifPresent((status) {
-      props['status'] = status;
+      props['status'] = DeckStatusHelper.serialize(status);
     });
 
     exercisedAt.ifPresent((exercisedAt) {
