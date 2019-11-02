@@ -31,10 +31,17 @@ class BottomSheet extends StatelessWidget {
       curve: Curves.decelerate,
       padding: mediaQuery.viewInsets,
 
-      child: Container(
-        width: double.maxFinite,
-        color: theme.dialogBackgroundColor,
-        child: buildChild(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(BOTTOM_SHEET_BORDER_RADIUS),
+          topRight: Radius.circular(BOTTOM_SHEET_BORDER_RADIUS),
+        ),
+
+        child: Container(
+          width: double.maxFinite,
+          color: theme.dialogBackgroundColor,
+          child: buildChild(),
+        ),
       ),
     );
   }
