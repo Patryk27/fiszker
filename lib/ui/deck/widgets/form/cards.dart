@@ -64,6 +64,13 @@ class DeckFormCardsSection extends StatelessWidget {
 
                 onCardTapped: onEditCard,
               ),
+
+              const SizedBox(height: 5),
+
+              RaisedButton(
+                onPressed: onCreateCard,
+                child: const Text('DODAJ NASTĘPNĄ FISZKĘ'),
+              ),
             ],
           ),
         ),
