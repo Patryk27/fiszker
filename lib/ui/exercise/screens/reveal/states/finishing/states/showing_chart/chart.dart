@@ -43,12 +43,10 @@ class ChartChart extends StatelessWidget {
     return Column(
       children: [
         // Chart
-        FlChart(
-          chart: PieChart(
-            PieChartData(
-              borderData: FlBorderData(show: false),
-              sections: buildChartSections(),
-            ),
+        PieChart(
+          PieChartData(
+            borderData: FlBorderData(show: false),
+            sections: buildChartSections(),
           ),
         ),
 
