@@ -26,10 +26,14 @@ class _RevealExerciseScreenState extends State<RevealExerciseScreen> {
         return WillPopScope(
           onWillPop: confirmClose,
 
-          child: Scaffold(
-            backgroundColor: const Color.fromARGB(255, 40, 40, 40),
-            extendBody: true,
-            body: state.buildWidget(),
+          child: Theme(
+            data: ThemeData.dark(),
+
+            child: Scaffold(
+              backgroundColor: const Color.fromARGB(255, 40, 40, 40),
+              extendBody: true,
+              body: state.buildWidget(),
+            ),
           ),
         );
       },
