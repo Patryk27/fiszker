@@ -1,4 +1,5 @@
 import 'package:fiszker/database.dart';
+import 'package:fiszker/domain.dart';
 import 'package:flutter/material.dart';
 
 import 'body/box_field.dart';
@@ -6,19 +7,19 @@ import 'body/side_field.dart';
 
 class CardFormBody extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final DeckEntity deck;
   final CardModel card;
-  final List<BoxModel> boxes;
   final void Function(CardModel card) onChanged;
 
   CardFormBody({
     @required this.formKey,
+    @required this.deck,
     @required this.card,
-    @required this.boxes,
     @required this.onChanged,
   })
       : assert(formKey != null),
+        assert(deck != null),
         assert(card != null),
-        assert(boxes != null),
         assert(onChanged != null);
 
   @override
@@ -41,11 +42,9 @@ class _CardFormBodyState extends State<CardFormBody> {
             autofocus: widget.card.front.isEmpty,
 
             onChanged: (front) {
-              widget.onChanged(
-                widget.card.copyWith(
-                  front: front,
-                ),
-              );
+              widget.onChanged(widget.card.copyWith(
+                front: front,
+              ));
             },
           ),
 
@@ -59,11 +58,9 @@ class _CardFormBodyState extends State<CardFormBody> {
             autofocus: false,
 
             onChanged: (back) {
-              widget.onChanged(
-                widget.card.copyWith(
-                  back: back,
-                ),
-              );
+              widget.onChanged(widget.card.copyWith(
+                back: back,
+              ));
             },
           ),
 
@@ -71,15 +68,13 @@ class _CardFormBodyState extends State<CardFormBody> {
 
           // Card's box
           CardBoxField(
-            boxes: widget.boxes,
+            boxes: widget.deck.boxes,
             value: widget.card.boxId,
 
             onChanged: (boxId) {
-              widget.onChanged(
-                widget.card.copyWith(
-                  boxId: boxId,
-                ),
-              );
+              widget.onChanged(widget.card.copyWith(
+                boxId: boxId,
+              ));
             },
           ),
         ],

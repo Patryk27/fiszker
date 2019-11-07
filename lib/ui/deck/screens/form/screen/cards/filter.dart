@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 ///
 ///   - text filter (like 'computer')
 ///     Returns only those cards, which front or back side contain given string.
+///
+/// @todo could this be moved into DeckEntity?
 List<CardModel> filterCards({
   @required List<CardModel> cards,
   @required List<BoxModel> boxes,

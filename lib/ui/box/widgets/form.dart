@@ -1,5 +1,6 @@
 import 'package:fiszker/database.dart';
-import 'package:fiszker/ui.dart' as frontend;
+import 'package:fiszker/domain.dart';
+import 'package:fiszker/ui.dart' as ui;
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
@@ -76,7 +77,7 @@ class _BoxFormState extends State<BoxForm> {
     return WillPopScope(
       onWillPop: confirmClose,
 
-      child: frontend.BottomSheet(
+      child: ui.BottomSheet(
         // Form's title
         title: Optional.of(
           (widget.formBehavior == BoxFormBehavior.createBox)
@@ -199,7 +200,7 @@ class _BoxFormState extends State<BoxForm> {
 /// Opens the [BoxForm] in the "Create a box" mode.
 Future<void> showCreateBoxForm({
   @required BuildContext context,
-  @required BoxModel box,
+  @required DeckEntity deck,
   @required BoxFormSubmitHandler onSubmit,
 }) async {
   await showModalBottomSheet(
@@ -209,7 +210,12 @@ Future<void> showCreateBoxForm({
     builder: (context) {
       return BoxForm(
         formBehavior: BoxFormBehavior.createBox,
-        box: box,
+
+        box: BoxModel.create(
+          deckId: deck.deck.id,
+          index: deck.boxes.length + 1,
+        ),
+
         onSubmit: onSubmit,
         onDelete: const Optional.empty(),
         onShowCards: const Optional.empty(),
@@ -221,10 +227,11 @@ Future<void> showCreateBoxForm({
 /// Opens the [BoxForm] in the "Edit a box" mode.
 Future<void> showEditBoxForm({
   @required BuildContext context,
+  @required DeckEntity deck,
   @required BoxModel box,
   @required BoxFormSubmitHandler onSubmit,
-  @required Optional<BoxFormDeleteHandler> onDelete,
-  @required Optional<BoxFormShowCardsHandler> onShowCards,
+  @required BoxFormDeleteHandler onDelete,
+  @required BoxFormShowCardsHandler onShowCards,
 }) async {
   await showModalBottomSheet(
     context: context,
@@ -235,8 +242,14 @@ Future<void> showEditBoxForm({
         formBehavior: BoxFormBehavior.editBox,
         box: box,
         onSubmit: onSubmit,
-        onDelete: onDelete,
-        onShowCards: onShowCards,
+
+        onDelete: (deck.boxes.length > 2)
+            ? Optional.of(onDelete)
+            : Optional.empty(),
+
+        onShowCards: (deck.countCardsInsideBox(box) > 0)
+            ? Optional.of(onShowCards)
+            : Optional.empty(),
       );
     },
   );

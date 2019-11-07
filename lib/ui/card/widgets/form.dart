@@ -1,5 +1,6 @@
 import 'package:fiszker/database.dart';
-import 'package:fiszker/ui.dart' as frontend;
+import 'package:fiszker/domain.dart';
+import 'package:fiszker/ui.dart' as ui;
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
@@ -18,7 +19,7 @@ enum CardFormBehavior {
 }
 
 /// This widget models a bottom sheet responsible for creating and editing single cards.
-/// It's a part of the [DeckForm], which is generally used to create and edit decks, their boxes and cards.
+/// It's a part of the [DeckFormScreen], which is generally used to create and edit decks, their boxes and cards.
 ///
 /// # Safety
 ///
@@ -27,12 +28,11 @@ enum CardFormBehavior {
 class CardForm extends StatefulWidget {
   final CardFormBehavior formBehavior;
 
-  /// The card we're creating or editing.
-  final CardModel card;
+  /// Deck to which the [card] belongs to.
+  final DeckEntity deck;
 
-  /// List of all the boxes that belong to this card's deck.
-  /// Used to display the "Card's deck:" form field.
-  final List<BoxModel> boxes;
+  /// Card we're creating or editing.
+  final CardModel card;
 
   /// Handler for the "form submitted" event.
   /// It's responsible for actually committing data to the database.
@@ -44,14 +44,14 @@ class CardForm extends StatefulWidget {
 
   CardForm({
     @required this.formBehavior,
+    @required this.deck,
     @required this.card,
-    @required this.boxes,
     @required this.onSubmit,
     @required this.onDelete,
   })
       : assert(formBehavior != null),
+        assert(deck != null),
         assert(card != null),
-        assert(boxes != null),
         assert(onSubmit != null),
         assert(onDelete != null);
 
@@ -71,8 +71,8 @@ class _CardFormState extends State<CardForm> {
     Widget buildBody() {
       return CardFormBody(
         formKey: formKey,
+        deck: widget.deck,
         card: card,
-        boxes: widget.boxes,
 
         onChanged: (card) {
           setState(() {
@@ -110,7 +110,7 @@ class _CardFormState extends State<CardForm> {
     return WillPopScope(
       onWillPop: confirmClose,
 
-      child: frontend.BottomSheet(
+      child: ui.BottomSheet(
         title: Optional.of(
           (widget.formBehavior == CardFormBehavior.createCard)
               ? 'Tworzenie fiszki'
@@ -203,8 +203,7 @@ class _CardFormState extends State<CardForm> {
 /// Opens the [CardForm] in the "Create a card" mode.
 Future<void> showCreateCardForm({
   @required BuildContext context,
-  @required CardModel card,
-  @required List<BoxModel> boxes,
+  @required DeckEntity deck,
   @required CardFormSubmitHandler onSubmit,
 }) async {
   await showModalBottomSheet(
@@ -214,8 +213,16 @@ Future<void> showCreateCardForm({
     builder: (context) {
       return CardForm(
         formBehavior: CardFormBehavior.createCard,
-        card: card,
-        boxes: boxes,
+        deck: deck,
+
+        card: CardModel.create(
+          deckId: deck.deck.id,
+
+          boxId: deck.boxes
+              .firstWhere((box) => box.index == 1)
+              .id,
+        ),
+
         onSubmit: onSubmit,
         onDelete: const Optional.empty(),
       );
@@ -226,8 +233,8 @@ Future<void> showCreateCardForm({
 /// Opens the [CardForm] in the "Edit a card" mode.
 Future<void> showEditCardForm({
   @required BuildContext context,
+  @required DeckEntity deck,
   @required CardModel card,
-  @required List<BoxModel> boxes,
   @required CardFormSubmitHandler onSubmit,
   @required CardFormDeleteHandler onDelete,
 }) async {
@@ -238,8 +245,8 @@ Future<void> showEditCardForm({
     builder: (context) {
       return CardForm(
         formBehavior: CardFormBehavior.editCard,
+        deck: deck,
         card: card,
-        boxes: boxes,
         onSubmit: onSubmit,
         onDelete: Optional.of(onDelete),
       );

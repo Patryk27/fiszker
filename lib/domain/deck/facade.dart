@@ -31,8 +31,8 @@ class DeckFacade {
     );
   }
 
-  Future<void> create(DeckEntity deck) async {
-    await deckCreator.create(deck);
+  Future<void> create(String deckName) async {
+    await deckCreator.create(deckName);
   }
 
   Future<void> update(DeckEntity deck) async {

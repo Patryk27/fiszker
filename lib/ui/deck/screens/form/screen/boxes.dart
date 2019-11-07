@@ -1,43 +1,41 @@
 import 'package:fiszker/database.dart';
+import 'package:fiszker/domain.dart';
 import 'package:fiszker/theme.dart';
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
 /// This widget models the "Boxes" section of the [DeckForm] widget.
-class DeckFormBoxesSection extends StatefulWidget {
-  final List<BoxModel> boxes;
-  final List<CardModel> cards;
+class BoxesFormSection extends StatefulWidget {
+  final DeckEntity deck;
   final void Function() onCreateBox;
-  final void Function(BoxModel box) onShowBox;
+  final void Function(BoxModel box) onEditBox;
   final void Function(BoxModel box, int newIndex) onMoveBox;
 
-  DeckFormBoxesSection({
-    @required this.boxes,
-    @required this.cards,
+  BoxesFormSection({
+    @required this.deck,
     @required this.onCreateBox,
-    @required this.onShowBox,
+    @required this.onEditBox,
     @required this.onMoveBox,
   })
-      : assert(boxes != null),
-        assert(cards != null),
+      : assert(deck != null),
         assert(onCreateBox != null),
-        assert(onShowBox != null),
+        assert(onEditBox != null),
         assert(onMoveBox != null);
 
   @override
-  State<DeckFormBoxesSection> createState() => _DeckFormBoxesSectionState();
+  State<BoxesFormSection> createState() => _BoxesFormSectionState();
 }
 
-class _DeckFormBoxesSectionState extends State<DeckFormBoxesSection> {
+class _BoxesFormSectionState extends State<BoxesFormSection> {
   @override
   Widget build(BuildContext context) {
-    if (widget.boxes.isEmpty) {
+    if (widget.deck.boxes.isEmpty) {
       return EmptyBoxList(
         onCreateBoxPressed: widget.onCreateBox,
       );
     }
 
-    final boxes = List.of(widget.boxes);
+    final boxes = List.of(widget.deck.boxes);
 
     // Sort boxes ascending by indexes
     boxes.sort((boxA, boxB) {
@@ -49,8 +47,8 @@ class _DeckFormBoxesSectionState extends State<DeckFormBoxesSection> {
 
       child: BoxList(
         boxes: boxes,
-        cards: widget.cards,
-        onBoxTapped: widget.onShowBox,
+        cards: widget.deck.cards,
+        onBoxTapped: widget.onEditBox,
         onBoxMoved: widget.onMoveBox,
       ),
     );

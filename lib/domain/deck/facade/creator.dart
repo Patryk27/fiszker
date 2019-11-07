@@ -14,17 +14,25 @@ class DeckCreator {
         assert(deckStorage != null);
 
   /// See: [DeckFacade.create]
-  Future<void> create(DeckEntity deck) async {
+  Future<void> create(String name) async {
+    // @todo validate name
+    // @todo add transaction
+
     // Create deck
+    final deck = DeckEntity.create(
+      name: name,
+    );
+
+    // Save deck
     await deckStorage.add(deck.deck);
 
-    // Create boxes
+    // Save boxes
     for (final box in deck.boxes) {
       assert(box.deckId == deck.deck.id);
       await boxStorage.add(box);
     }
 
-    // Create cards
+    // Save cards
     for (final card in deck.cards) {
       assert(card.deckId == deck.deck.id);
       await cardStorage.add(card);

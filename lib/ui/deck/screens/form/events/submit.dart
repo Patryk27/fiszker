@@ -1,36 +1,25 @@
 import 'package:fiszker/domain.dart';
 import 'package:fiszker/ui.dart';
-import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
 import '../bloc.dart';
 
-/// Saves all changes (renames, added cards and so on) to the database.
-/// It's dispatched when user clicks the "Submit" button.
 class Submit extends DeckFormBlocEvent {
-  final DeckFormBehavior formBehavior;
   final DeckEntity deck;
+  final Optional<DeckFormBlocState> successNotification;
 
-  Submit({
-    @required this.formBehavior,
-    @required this.deck,
-  })
-      : assert(formBehavior != null),
-        assert(deck != null);
+  Submit(this.deck, { DeckFormBlocState successNotification })
+      : assert(deck != null),
+        successNotification = Optional.ofNullable(successNotification);
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
     yield Submitting();
+    await bloc.deckFacade.update(deck);
+    yield Submitted(deck);
 
-    switch (formBehavior) {
-      case DeckFormBehavior.createDeck:
-        await bloc.deckFacade.create(deck);
-        break;
-
-      case DeckFormBehavior.editDeck:
-        await bloc.deckFacade.update(deck);
-        break;
+    if (successNotification.isPresent) {
+      yield successNotification.value;
     }
-
-    yield Submitted();
   }
 }

@@ -150,41 +150,42 @@ class _WidgetState extends State<_Widget> {
     );
   }
 
-  /// Opens the [DeckDetails] modal.
+  /// Opens the [DeckActions] widget.
   Future<void> openDeck(DeckEntity deck) async {
-    await showModalBottomSheet(
+    showDeckActions(
       context: context,
+      deck: deck,
 
-      builder: (context) {
-        return DeckBottomSheet(
-          deck: deck,
+      onEdit: () {
+        editDeck(deck, replaceCurrentRoute: true);
+      },
 
-          onEditPressed: () async {
-            editDeck(deck, replaceCurrentRoute: true);
-          },
+      onDelete: () async {
+        if (await deleteDeck(deck)) {
+          Navigator.pop(context);
+        }
+      },
 
-          onDeletePressed: () async {
-            if (await deleteDeck(deck)) {
-              Navigator.pop(context);
-            }
-          },
-
-          onExerciseSelected: (exercise) async {
-            startExercise(deck, exercise);
-          },
-        );
+      onExercise: (exercise) {
+        startExercise(deck, exercise);
       },
     );
   }
 
-  /// Opens the [DeckForm], allowing user to create a new deck.
+  /// Opens the deck form, allowing user to create a new deck.
   Future<void> createDeck() async {
-    await Navigator.pushNamed(context, 'decks--create');
+    showCreateDeckForm(
+      context: context,
 
-    refresh();
+      onSubmit: (deckName) {
+        // @todo
+
+        refresh();
+      },
+    );
   }
 
-  /// Opens the [DeckForm], allowing user to edit specified deck.
+  /// Opens the deck form, allowing user to edit specified deck.
   ///
   /// The [replaceCurrentRoute] flag should be enabled if a bottom sheet is currently opened - this way the transition
   /// is way smoother.

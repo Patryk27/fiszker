@@ -1,19 +1,14 @@
 import 'package:fiszker/database.dart';
-import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 
 /// This widget models the "Deck name" form field.
 /// It's a part of the [DeckForm], not meant for standalone use.
 class DeckNameField extends StatefulWidget {
   final DeckModel deck;
-  final void Function(DeckModel deck) onChanged;
 
   DeckNameField({
     @required this.deck,
-    @required this.onChanged,
-  })
-      : assert(deck != null),
-        assert(onChanged != null);
+  }) : assert(deck != null);
 
   @override
   State<DeckNameField> createState() => _DeckNameFieldState();
@@ -58,7 +53,7 @@ class _DeckNameFieldState extends State<DeckNameField> {
         name: controller.text.trim(),
       );
 
-      widget.onChanged(deck);
+      // @todo
     });
   }
 

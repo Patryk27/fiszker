@@ -31,8 +31,10 @@ class DeckModel extends Model {
         super(id: id);
 
   /// Creates a new, empty deck.
-  DeckModel.create()
-      : name = '',
+  DeckModel.create({
+    @required this.name,
+  })
+      : assert(name != null),
         status = DeckStatus.active,
         createdAt = DateTime.now(),
         exercisedAt = const Optional.empty(),

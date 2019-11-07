@@ -5,14 +5,10 @@ import 'package:flutter/material.dart';
 /// It's a part of the [DeckForm], not meant for standalone use.
 class DeckStatusField extends StatefulWidget {
   final DeckModel deck;
-  final void Function(DeckModel deck) onChanged;
 
   DeckStatusField({
     @required this.deck,
-    @required this.onChanged,
-  })
-      : assert(deck != null),
-        assert(onChanged != null);
+  }) : assert(deck != null);
 
   @override
   State<StatefulWidget> createState() => _DeckStatusFieldState();
@@ -32,11 +28,7 @@ class _DeckStatusFieldState extends State<DeckStatusField> {
       items: buildItems(),
 
       onChanged: (value) {
-        widget.onChanged(
-          widget.deck.copyWith(
-            status: value,
-          ),
-        );
+        // @todo
       },
     );
   }

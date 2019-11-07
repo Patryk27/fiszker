@@ -17,8 +17,12 @@ class DeckEntity {
         assert(boxes != null),
         assert(cards != null);
 
-  static DeckEntity create() {
-    final deck = DeckModel.create();
+  static DeckEntity create({
+    @required String name,
+  }) {
+    final deck = DeckModel.create(
+      name: name,
+    );
 
     return new DeckEntity(
       deck: deck,
@@ -32,6 +36,19 @@ class DeckEntity {
       ],
 
       cards: [],
+    );
+  }
+
+  /// Returns a new [DeckEntity] overwritten with specified values.
+  DeckEntity copyWith({
+    DeckModel deck,
+    List<BoxModel> boxes,
+    List<CardModel> cards,
+  }) {
+    return DeckEntity(
+      deck: deck ?? this.deck,
+      boxes: boxes ?? this.boxes,
+      cards: cards ?? this.cards,
     );
   }
 

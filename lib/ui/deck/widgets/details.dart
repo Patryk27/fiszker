@@ -1,5 +1,5 @@
 import 'package:fiszker/domain.dart';
-import 'package:fiszker/ui.dart' as frontend;
+import 'package:fiszker/ui.dart' as ui;
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
@@ -23,7 +23,7 @@ class DeckDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return frontend.BottomSheet(
+    return ui.BottomSheet(
       title: Optional.of(deck.deck.name),
 
       body: Details(
