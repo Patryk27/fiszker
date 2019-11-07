@@ -22,6 +22,7 @@ class _ExerciseCloseButtonState extends State<ExerciseCloseButton> {
 
       child: IconButton(
         icon: const Icon(Icons.close),
+        color: Colors.white,
 
         onPressed: () {
           Navigator.maybePop(context);
