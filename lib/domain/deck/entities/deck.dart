@@ -24,7 +24,7 @@ class DeckEntity {
       name: name,
     );
 
-    return new DeckEntity(
+    return DeckEntity(
       deck: deck,
 
       boxes: [

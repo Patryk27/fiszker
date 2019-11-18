@@ -75,7 +75,7 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
       child: BlocBuilder<DeckFormBloc, DeckFormBlocState>(
         builder: (context, state) {
           if (!deck.isPresent) {
-            return LoadingScreen(
+            return const LoadingScreen(
               title: 'Trwa wczytywanie...',
               message: 'Trwa wczytywanie...',
             );

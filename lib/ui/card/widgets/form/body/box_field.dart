@@ -29,7 +29,7 @@ class _CardBoxFieldState extends State<CardBoxField> {
     return DropdownButtonFormField(
       value: widget.value,
 
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Pudełko',
         alignLabelWithHint: true,
       ),

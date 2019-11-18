@@ -25,7 +25,7 @@ class _BoxNameFieldState extends State<BoxNameField> {
       controller: controller,
       autofocus: widget.box.name.isEmpty,
 
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'Np.: Początek tygodnia',
         labelText: 'Nazwa pudełka',
         alignLabelWithHint: true,

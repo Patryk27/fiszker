@@ -30,7 +30,7 @@ class _ExerciseBoxDropdownState extends State<ExerciseBoxDropdown> {
       value: widget.value,
       onChanged: widget.onChanged,
 
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Wybierz pudełko',
         alignLabelWithHint: true,
       ),

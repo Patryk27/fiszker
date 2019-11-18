@@ -22,7 +22,7 @@ class _ExerciseModeDropdownState extends State<ExerciseModeDropdown> {
     return DropdownButtonFormField(
       value: widget.value,
 
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Wybierz tryb',
         alignLabelWithHint: true,
       ),
