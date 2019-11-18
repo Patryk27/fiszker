@@ -13,19 +13,13 @@ class UpdateCard extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    // Locate card in the deck
     final cardIdx = deck.cards.indexWhere((card) {
       return card.id == this.card.id;
     });
 
-    if (cardIdx < 0) {
-      return;
+    if (cardIdx >= 0) {
+      deck.cards[cardIdx] = card;
+      bloc.add(Submit(deck, successNotification: CardUpdated()));
     }
-
-    // Update card
-    deck.cards[cardIdx] = card;
-
-    // Save changes
-    bloc.add(Submit(deck, successNotification: CardUpdated()));
   }
 }

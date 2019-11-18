@@ -24,8 +24,8 @@ class _AppInitializeScreenState extends State<AppInitializeScreen> {
   void initState() {
     super.initState();
 
-    AppInitializeBloc.of(context).add(
-      Initialize(),
-    );
+    AppInitializeBloc
+        .of(context)
+        .add(Initialize());
   }
 }

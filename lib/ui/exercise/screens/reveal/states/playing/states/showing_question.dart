@@ -17,9 +17,9 @@ class _Actions extends StatelessWidget {
     return RaisedButton(
       color: Colors.lightBlue,
       onPressed: () {
-        PlayingBloc.of(context).add(
-          ShowAnswer(),
-        );
+        PlayingBloc
+            .of(context)
+            .add(ShowAnswer());
       },
 
       child: const Padding(
@@ -38,9 +38,9 @@ class _Body extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        PlayingBloc.of(context).add(
-          ShowAnswer(),
-        );
+        PlayingBloc
+            .of(context)
+            .add(ShowAnswer());
       },
 
       child: CardSide(

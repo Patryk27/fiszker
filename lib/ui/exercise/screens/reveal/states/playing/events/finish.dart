@@ -10,8 +10,8 @@ class Finish extends PlayingBlocEvent {
 
     // Animate the "shifting cards" thingy
     yield ShiftingCards(
-      previousCard: Optional.of(bloc.exercise.currentCard),
-      nextCard: const Optional.empty(),
+      Optional.of(bloc.exercise.currentCard),
+      const Optional.empty(),
     );
 
     // Wait until the "shifting cards" animation completes

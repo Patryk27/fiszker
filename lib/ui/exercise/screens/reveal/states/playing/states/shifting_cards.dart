@@ -14,10 +14,7 @@ class ShiftingCards extends PlayingBlocState {
   /// Card that will be animated as the one entering the screen.
   final Optional<CardModel> nextCard;
 
-  ShiftingCards({
-    @required this.previousCard,
-    @required this.nextCard,
-  })
+  ShiftingCards(this.previousCard, this.nextCard)
       : assert(previousCard != null),
         assert(nextCard != null),
         assert(previousCard.isPresent || nextCard.isPresent);
@@ -109,7 +106,6 @@ class _BodyState extends State<_Body> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     animationController.dispose();
-
     super.dispose();
   }
 }

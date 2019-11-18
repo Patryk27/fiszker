@@ -62,7 +62,6 @@ class _BoxNameFieldState extends State<BoxNameField> {
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 }

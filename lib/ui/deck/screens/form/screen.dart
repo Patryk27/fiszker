@@ -62,13 +62,13 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
           deck = Optional.of(state.deck);
         }
 
-        if (state is Submitted) {
+        if (state is Submitting) {
           // No need to `setState()`, since the `BlocBuilder` will be called in a moment anyway
           deck = Optional.of(state.deck);
         }
 
         if (scaffoldKey.currentState != null) {
-          state.showNotification(scaffoldKey.currentState);
+          state.onEntered(scaffoldKey.currentState);
         }
       },
 
@@ -162,7 +162,11 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
         .of(context)
         .add(Initialize(widget.deckId));
 
-    tabController = TabController(vsync: this, length: 3);
+    tabController = TabController(
+      initialIndex: 1,
+      length: 3,
+      vsync: this,
+    );
 
     cardsQueryController.addListener(() {
       setState(() {
@@ -175,7 +179,6 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
   void dispose() {
     tabController.dispose();
     cardsQueryController.dispose();
-
     super.dispose();
   }
 
@@ -185,7 +188,7 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
     // This serves no purpose besides maybe helping user to locate where the newly-created card ended up
     tabController.animateTo(1);
 
-    // Open the card form
+    // Open the card creator
     showCreateCardForm(
       context: context,
       deck: deck.value,
@@ -225,7 +228,7 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
     // This serves no purpose besides maybe helping user to locate where the newly-created box ended up
     tabController.animateTo(2);
 
-    // Open the box form
+    // Open the box creator
     showCreateBoxForm(
       context: context,
       deck: deck.value,

@@ -68,13 +68,9 @@ class _WidgetState extends State<_Widget> {
 
           SettingUpStartButton(
             onPressed: () {
-              RevealExerciseBloc.of(context).add(
-                Start(
-                  deck: widget.deck,
-                  box: selectedBox,
-                  mode: selectedMode,
-                ),
-              );
+              RevealExerciseBloc
+                  .of(context)
+                  .add(Start(widget.deck, selectedBox, selectedMode));
             },
           ),
         ],

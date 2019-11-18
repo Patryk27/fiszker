@@ -48,11 +48,9 @@ class _RevealExerciseScreenState extends State<RevealExerciseScreen> {
       SystemUiOverlay.bottom,
     ]);
 
-    RevealExerciseBloc.of(context).add(
-      Initialize(
-        deckId: widget.deckId,
-      ),
-    );
+    RevealExerciseBloc
+        .of(context)
+        .add(Initialize(widget.deckId));
   }
 
   @override

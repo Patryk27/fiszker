@@ -13,19 +13,13 @@ class UpdateBox extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    // Locate box in the deck
     final boxIdx = deck.boxes.indexWhere((box) {
       return box.id == this.box.id;
     });
 
-    if (boxIdx < 0) {
-      return;
+    if (boxIdx >= 0) {
+      deck.boxes[boxIdx] = box;
+      bloc.add(Submit(deck, successNotification: BoxUpdated()));
     }
-
-    // Update box
-    deck.boxes[boxIdx] = box;
-
-    // Save changes
-    bloc.add(Submit(deck, successNotification: BoxUpdated()));
   }
 }

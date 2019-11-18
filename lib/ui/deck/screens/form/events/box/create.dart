@@ -13,10 +13,7 @@ class CreateBox extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    // Add box to the deck
     deck.boxes.add(box);
-
-    // Save changes
     bloc.add(Submit(deck, successNotification: BoxCreated()));
   }
 }

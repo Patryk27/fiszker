@@ -13,10 +13,7 @@ class CreateCard extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    // Add card to the deck
     deck.cards.add(card);
-
-    // Save changes
     bloc.add(Submit(deck, successNotification: CardCreated()));
   }
 }

@@ -24,8 +24,8 @@ class _DeckIndexScreenState extends State<DeckIndexScreen> {
   void initState() {
     super.initState();
 
-    DeckIndexBloc.of(context).add(
-      Initialize(),
-    );
+    DeckIndexBloc
+        .of(context)
+        .add(Initialize());
   }
 }

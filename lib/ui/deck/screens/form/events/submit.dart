@@ -14,9 +14,9 @@ class Submit extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    yield Submitting();
+    yield Submitting(deck);
     await bloc.deckFacade.update(deck);
-    yield Submitted(deck);
+    yield Submitted();
 
     if (successNotification.isPresent) {
       yield successNotification.value;

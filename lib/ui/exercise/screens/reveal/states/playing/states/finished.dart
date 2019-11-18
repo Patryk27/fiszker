@@ -25,12 +25,12 @@ class _BodyState extends State<_Body> {
   void initState() {
     super.initState();
 
-    RevealExerciseBloc.of(context).add(
-      Finalize(
-        exercise: PlayingBloc
-            .of(context)
-            .exercise,
-      ),
-    );
+    final exercise = PlayingBloc
+        .of(context)
+        .exercise;
+
+    RevealExerciseBloc
+        .of(context)
+        .add(Finalize(exercise));
   }
 }

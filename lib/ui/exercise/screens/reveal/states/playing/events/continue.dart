@@ -10,8 +10,8 @@ class Continue extends PlayingBlocEvent {
 
     // Animate the "shifting cards" thingy
     yield ShiftingCards(
-      previousCard: Optional.of(bloc.exercise.currentCard),
-      nextCard: Optional.of(nextCard),
+      Optional.of(bloc.exercise.currentCard),
+      Optional.of(nextCard),
     );
 
     // Wait until the "shifting cards" animation completes

@@ -7,8 +7,8 @@ class Start extends PlayingBlocEvent {
   Stream<PlayingBlocState> mapToState(PlayingBloc bloc) async* {
     // Let's animate-in the first card
     yield ShiftingCards(
-      previousCard: Optional.empty(),
-      nextCard: Optional.of(bloc.exercise.currentCard),
+      Optional.empty(),
+      Optional.of(bloc.exercise.currentCard),
     );
 
     // Wait until the "shifting cards" animation completes

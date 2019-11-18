@@ -16,7 +16,7 @@ class Initialize extends DeckFormBlocEvent {
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
     yield Initialized(
-      deck: await bloc.deckFacade.findById(deckId),
+      await bloc.deckFacade.findById(deckId),
     );
   }
 }

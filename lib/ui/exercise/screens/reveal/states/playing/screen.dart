@@ -22,8 +22,8 @@ class _PlayingScreenState extends State<PlayingScreen> {
   void initState() {
     super.initState();
 
-    PlayingBloc.of(context).add(
-      Start(),
-    );
+    PlayingBloc
+        .of(context)
+        .add(Start());
   }
 }

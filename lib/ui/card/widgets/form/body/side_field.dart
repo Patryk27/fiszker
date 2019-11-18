@@ -68,7 +68,6 @@ class _CardSideFieldState extends State<CardSideField> {
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 }

@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-
 import '../bloc.dart';
 
 class Answer extends PlayingBlocEvent {
   final bool isCorrect;
 
-  Answer({
-    @required this.isCorrect,
-  }) : assert(isCorrect != null);
+  Answer(this.isCorrect)
+      : assert(isCorrect != null);
 
   @override
   Stream<PlayingBlocState> mapToState(PlayingBloc bloc) async* {

@@ -13,12 +13,10 @@ class DeleteCard extends DeckFormBlocEvent {
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
-    // Remove card from the deck
     deck.cards.removeWhere((card) {
       return card.id == this.card.id;
     });
 
-    // Save changes
     bloc.add(Submit(deck, successNotification: CardDeleted()));
   }
 }

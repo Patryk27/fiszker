@@ -2,6 +2,7 @@ import 'package:fiszker/database.dart';
 import 'package:fiszker/domain.dart';
 import 'package:fiszker/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
 import '../bloc.dart';
 
@@ -10,11 +11,7 @@ class Initialized extends DeckIndexBlocState {
   final List<DeckEntity> archivedDecks;
   final List<DeckEntity> completedDecks;
 
-  Initialized({
-    @required this.activeDecks,
-    @required this.archivedDecks,
-    @required this.completedDecks,
-  })
+  Initialized(this.activeDecks, this.archivedDecks, this.completedDecks)
       : assert(activeDecks != null),
         assert(archivedDecks != null),
         assert(completedDecks != null);
@@ -23,20 +20,21 @@ class Initialized extends DeckIndexBlocState {
     final deckFacade = bloc.deckFacade;
 
     return Initialized(
-      activeDecks: await deckFacade.findByStatus(DeckStatus.active),
-      archivedDecks: await deckFacade.findByStatus(DeckStatus.archived),
-      completedDecks: await deckFacade.findByStatus(DeckStatus.completed),
+      await deckFacade.findByStatus(DeckStatus.active),
+      await deckFacade.findByStatus(DeckStatus.archived),
+      await deckFacade.findByStatus(DeckStatus.completed),
     );
   }
 
   @override
-  Widget buildWidget() => _Widget(this);
+  Optional<Widget> buildWidget(GlobalKey<ScaffoldState> scaffoldKey) => Optional.of(_Widget(this, scaffoldKey));
 }
 
 class _Widget extends StatefulWidget {
   final Initialized state;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  _Widget(this.state);
+  _Widget(this.state, this.scaffoldKey);
 
   @override
   State<_Widget> createState() => _WidgetState();
@@ -49,6 +47,8 @@ class _WidgetState extends State<_Widget> {
       length: 3,
 
       child: Scaffold(
+        key: widget.scaffoldKey,
+
         appBar: AppBar(
           title: const Text('Zestawy fiszek'),
           bottom: TabBar(
@@ -172,23 +172,23 @@ class _WidgetState extends State<_Widget> {
     );
   }
 
-  /// Opens the deck form, allowing user to create a new deck.
+  /// Opens the deck creator.
   Future<void> createDeck() async {
     showCreateDeckForm(
       context: context,
 
       onSubmit: (deckName) {
-        // @todo
-
-        refresh();
+        DeckIndexBloc
+            .of(context)
+            .add(CreateDeck(deckName));
       },
     );
   }
 
-  /// Opens the deck form, allowing user to edit specified deck.
+  /// Opens the deck editor.
   ///
-  /// The [replaceCurrentRoute] flag should be enabled if a bottom sheet is currently opened - this way the transition
-  /// is way smoother.
+  /// The [replaceCurrentRoute] should be `true` if there's a bottom sheet currently opened - this way the transition
+  /// will be smoother.
   Future<void> editDeck(DeckEntity deck, {bool replaceCurrentRoute = false}) async {
     if (replaceCurrentRoute) {
       await Navigator.pushReplacementNamed(context, 'decks--edit', arguments: deck.deck.id);
@@ -211,11 +211,9 @@ class _WidgetState extends State<_Widget> {
     );
 
     if (confirmed) {
-      DeckIndexBloc.of(context).add(
-        DeleteDeck(
-          deck: deck,
-        ),
-      );
+      DeckIndexBloc
+          .of(context)
+          .add(DeleteDeck(deck));
 
       refresh();
     }
@@ -233,8 +231,8 @@ class _WidgetState extends State<_Widget> {
   /// Refreshes list of our decks.
   /// Should be called each time a deck is created, modified or deleted.
   void refresh() {
-    DeckIndexBloc.of(context).add(
-      Refresh(),
-    );
+    DeckIndexBloc
+        .of(context)
+        .add(Refresh());
   }
 }

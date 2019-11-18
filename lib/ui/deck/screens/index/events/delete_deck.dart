@@ -1,14 +1,12 @@
 import 'package:fiszker/domain.dart';
-import 'package:flutter/material.dart';
 
 import '../bloc.dart';
 
 class DeleteDeck extends DeckIndexBlocEvent {
-  DeleteDeck({
-    @required this.deck,
-  }) : assert(deck != null);
-
   final DeckEntity deck;
+
+  DeleteDeck(this.deck)
+      : assert(deck != null);
 
   @override
   Stream<DeckIndexBlocState> mapToState(DeckIndexBloc bloc) async* {

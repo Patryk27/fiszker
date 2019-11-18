@@ -109,7 +109,6 @@ class _ExerciseProgressBarState extends State<ExerciseProgressBar> with SingleTi
   @override
   void dispose() {
     animationController.dispose();
-
     super.dispose();
   }
 }

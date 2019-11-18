@@ -14,9 +14,9 @@ class ChartActions extends StatelessWidget {
           label: const Text('DALEJ'),
 
           onPressed: () {
-            FinishingBloc.of(context).add(
-              ShowBoxes(),
-            );
+            FinishingBloc
+                .of(context)
+                .add(ShowBoxes());
           },
         ),
       ],

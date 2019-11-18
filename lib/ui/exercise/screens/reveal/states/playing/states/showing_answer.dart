@@ -31,11 +31,9 @@ class _Actions extends StatelessWidget {
           ),
 
           onPressed: () {
-            PlayingBloc.of(context).add(
-              Answer(
-                isCorrect: false,
-              ),
-            );
+            PlayingBloc
+                .of(context)
+                .add(Answer(false));
           },
         ),
 
@@ -54,11 +52,9 @@ class _Actions extends StatelessWidget {
           ),
 
           onPressed: () {
-            PlayingBloc.of(context).add(
-              Answer(
-                isCorrect: true,
-              ),
-            );
+            PlayingBloc
+                .of(context)
+                .add(Answer(true));
           },
         ),
       ],
@@ -125,7 +121,6 @@ class _BodyWidgetState extends State<_Body> with SingleTickerProviderStateMixin 
   @override
   void dispose() {
     animationController.dispose();
-
     super.dispose();
   }
 }

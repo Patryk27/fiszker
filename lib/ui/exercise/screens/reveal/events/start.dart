@@ -1,6 +1,5 @@
 import 'package:fiszker/database.dart';
 import 'package:fiszker/domain.dart';
-import 'package:flutter/material.dart';
 
 import '../bloc.dart';
 
@@ -9,11 +8,7 @@ class Start extends RevealExerciseBlocEvent {
   final BoxModel box;
   final ExerciseMode mode;
 
-  Start({
-    @required this.deck,
-    @required this.box,
-    @required this.mode,
-  })
+  Start(this.deck, this.box, this.mode)
       : assert(deck != null),
         assert(box != null),
         assert(mode != null);

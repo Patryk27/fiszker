@@ -19,7 +19,7 @@ enum _Status {
 class _FinishingScreenState extends State<FinishingScreen> with TickerProviderStateMixin {
   _Status status = _Status.entering;
 
-  Optional<FinishingBlocState> currentBlocState = Optional.empty();
+  Optional<FinishingBlocState> currentState = Optional.empty();
 
   Animator enteringAnimator;
   Animator leavingAnimator;
@@ -29,7 +29,7 @@ class _FinishingScreenState extends State<FinishingScreen> with TickerProviderSt
     return BlocListener<FinishingBloc, FinishingBlocState>(
       listener: (context, state) async {
         // If we're already displaying a screen, we have to animate-it-out first
-        if (currentBlocState.isPresent) {
+        if (currentState.isPresent) {
           setState(() {
             status = _Status.leaving;
           });
@@ -39,7 +39,7 @@ class _FinishingScreenState extends State<FinishingScreen> with TickerProviderSt
 
         // Now we can safely animate-in the new screen
         setState(() {
-          currentBlocState = Optional.of(state);
+          currentState = Optional.of(state);
           status = _Status.entering;
         });
 
@@ -53,14 +53,14 @@ class _FinishingScreenState extends State<FinishingScreen> with TickerProviderSt
 
       child: BlocBuilder<FinishingBloc, FinishingBlocState>(
         builder: (context, state) {
-          if (!currentBlocState.isPresent) {
-            currentBlocState = Optional.of(state);
+          if (!currentState.isPresent) {
+            currentState = Optional.of(state);
           }
 
           switch (status) {
             case _Status.entering:
               return enteringAnimator.buildWidget(
-                currentBlocState.value.buildWidget(),
+                currentState.value.buildWidget(),
               );
 
             case _Status.idling:
@@ -68,7 +68,7 @@ class _FinishingScreenState extends State<FinishingScreen> with TickerProviderSt
 
             case _Status.leaving:
               return leavingAnimator.buildWidget(
-                currentBlocState.value.buildWidget(),
+                currentState.value.buildWidget(),
               );
           }
 
@@ -85,16 +85,15 @@ class _FinishingScreenState extends State<FinishingScreen> with TickerProviderSt
     enteringAnimator = FadeInAnimator(vsync: this);
     leavingAnimator = ScaleOutAnimator(vsync: this);
 
-    FinishingBloc.of(context).add(
-      Start(),
-    );
+    FinishingBloc
+        .of(context)
+        .add(Start());
   }
 
   @override
   void dispose() {
     leavingAnimator.dispose();
     enteringAnimator.dispose();
-
     super.dispose();
   }
 }
