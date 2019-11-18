@@ -1,6 +1,7 @@
 import 'package:fiszker/database.dart';
 import 'package:fiszker/i18n.dart';
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class BoxListItem extends StatelessWidget {
   final BoxModel box;
@@ -19,13 +20,29 @@ class BoxListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> buildSubtitle() {
+      final widgets = [
+        Text(inflector.pluralize(InflectorVerb.flashcard, InflectorCase.nominative, boxCardCount)),
+      ];
+
+      box.exercisedAt.ifPresent((exercisedAt) {
+        widgets.add(Text(', ostatnio: ${timeago.format(exercisedAt)}'));
+      });
+
+      return widgets;
+    }
+
     return Card(
       child: InkWell(
         onTap: onTapped,
 
         child: ListTile(
           title: Text(box.name),
-          subtitle: Text(inflector.pluralize(InflectorVerb.flashcard, InflectorCase.nominative, boxCardCount)),
+
+          subtitle: Row(
+            children: buildSubtitle(),
+          ),
+
           trailing: const Icon(Icons.edit),
         ),
       ),
