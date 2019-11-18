@@ -1,1 +1,1 @@
-export 'core/diff.dart';
+export 'core/compare.dart';

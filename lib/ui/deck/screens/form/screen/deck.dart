@@ -29,13 +29,13 @@ class _DeckFormSectionState extends State<DeckFormSection> {
 
         children: [
           DeckNameField(
-            deck: widget.deck.deck,
+            deck: widget.deck,
           ),
 
           const SizedBox(height: 15),
 
           DeckStatusField(
-            deck: widget.deck.deck,
+            deck: widget.deck,
           ),
         ],
       ),

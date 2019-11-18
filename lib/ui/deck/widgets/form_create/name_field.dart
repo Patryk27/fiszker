@@ -1,41 +1,35 @@
-import 'package:fiszker/database.dart';
 import 'package:flutter/material.dart';
 
-class BoxNameField extends StatefulWidget {
-  final BoxModel box;
-  final void Function(BoxModel box) onChanged;
+class DeckNameField extends StatefulWidget {
+  final bool enabled;
+  final void Function(String value) onChanged;
 
-  BoxNameField({
-    @required this.box,
+  DeckNameField({
+    @required this.enabled,
     @required this.onChanged,
   })
-      : assert(box != null),
+      : assert(enabled != null),
         assert(onChanged != null);
 
   @override
-  _BoxNameFieldState createState() => _BoxNameFieldState();
+  State<StatefulWidget> createState() => _DeckNameFieldState();
 }
 
-class _BoxNameFieldState extends State<BoxNameField> {
+class _DeckNameFieldState extends State<DeckNameField> {
   final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      autofocus: widget.box.name.isEmpty,
+      autofocus: true,
+      enabled: widget.enabled,
 
       decoration: const InputDecoration(
-        hintText: 'Np.: Początek tygodnia',
-        labelText: 'Nazwa pudełka',
+        hintText: 'Np.: francuski',
+        labelText: 'Nazwa zestawu',
         alignLabelWithHint: true,
       ),
-
-      validator: (value) {
-        return value
-            .trim()
-            .isEmpty ? 'Nazwa pudełka nie może być pusta.' : null;
-      },
 
       onEditingComplete: () {
         // When user finishes editing, dismiss the keyboard
@@ -50,13 +44,9 @@ class _BoxNameFieldState extends State<BoxNameField> {
   void initState() {
     super.initState();
 
-    controller.text = widget.box.name;
-
     controller.addListener(() {
       widget.onChanged(
-        widget.box.copyWith(
-          name: controller.text.trim(),
-        ),
+        controller.text.trim(),
       );
     });
   }

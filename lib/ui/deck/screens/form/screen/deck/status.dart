@@ -1,10 +1,13 @@
 import 'package:fiszker/database.dart';
+import 'package:fiszker/domain.dart';
 import 'package:flutter/material.dart';
+
+import '../../bloc.dart';
 
 /// This widget models the "Deck status" form field.
 /// It's a part of the [DeckForm], not meant for standalone use.
 class DeckStatusField extends StatefulWidget {
-  final DeckModel deck;
+  final DeckEntity deck;
 
   DeckStatusField({
     @required this.deck,
@@ -17,10 +20,12 @@ class DeckStatusField extends StatefulWidget {
 class _DeckStatusFieldState extends State<DeckStatusField> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      value: widget.deck.status,
+    final deck = widget.deck;
 
-      decoration: InputDecoration(
+    return DropdownButtonFormField(
+      value: deck.deck.status,
+
+      decoration: const InputDecoration(
         labelText: 'Status',
         alignLabelWithHint: true,
       ),
@@ -28,7 +33,9 @@ class _DeckStatusFieldState extends State<DeckStatusField> {
       items: buildItems(),
 
       onChanged: (value) {
-        // @todo
+        DeckFormBloc
+            .of(context)
+            .add(ChangeDeckStatus(deck, value));
       },
     );
   }

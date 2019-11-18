@@ -14,7 +14,7 @@ class DeckCreator {
         assert(deckStorage != null);
 
   /// See: [DeckFacade.create]
-  Future<void> create(String name) async {
+  Future<Id> create(String name) async {
     // @todo validate name
     // @todo add transaction
 
@@ -37,5 +37,7 @@ class DeckCreator {
       assert(card.deckId == deck.deck.id);
       await cardStorage.add(card);
     }
+
+    return deck.deck.id;
   }
 }

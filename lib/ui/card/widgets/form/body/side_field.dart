@@ -40,7 +40,9 @@ class _CardSideFieldState extends State<CardSideField> {
       ),
 
       validator: (value) {
-        return value.isEmpty ? 'Treść nie może być pusta.' : null;
+        return value
+            .trim()
+            .isEmpty ? 'Treść nie może być pusta.' : null;
       },
 
       onEditingComplete: () {

@@ -33,8 +33,8 @@ class DeckUpdater {
     assert(oldDeck.id == newDeck.id);
 
     await deckStorage.update(newDeck.id,
-      name: diff(oldDeck.name, newDeck.name),
-      status: diff(oldDeck.status, newDeck.status),
+      name: compare(oldDeck.name, newDeck.name),
+      status: compare(oldDeck.status, newDeck.status),
     );
   }
 
@@ -51,8 +51,8 @@ class DeckUpdater {
         await boxStorage.remove(oldBox.id);
       } else {
         await boxStorage.update(newBox.id,
-          index: diff(oldBox.index, newBox.index),
-          name: diff(oldBox.name, newBox.name),
+          index: compare(oldBox.index, newBox.index),
+          name: compare(oldBox.name, newBox.name),
         );
       }
     }
@@ -71,9 +71,9 @@ class DeckUpdater {
         await cardStorage.remove(oldCard.id);
       } else {
         await cardStorage.update(newCard.id,
-          boxId: diff(oldCard.boxId, newCard.boxId),
-          front: diff(oldCard.front, newCard.front),
-          back: diff(oldCard.back, newCard.back),
+          boxId: compare(oldCard.boxId, newCard.boxId),
+          front: compare(oldCard.front, newCard.front),
+          back: compare(oldCard.back, newCard.back),
         );
       }
     }

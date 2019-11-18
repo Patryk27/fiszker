@@ -10,8 +10,8 @@ export 'events/box/update.dart';
 export 'events/card/create.dart';
 export 'events/card/delete.dart';
 export 'events/card/update.dart';
-export 'events/deck/move.dart';
-export 'events/deck/rename.dart';
+export 'events/deck/change_name.dart';
+export 'events/deck/change_status.dart';
 export 'events/initialize.dart';
 export 'events/submit.dart';
 

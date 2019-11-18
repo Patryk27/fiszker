@@ -31,8 +31,9 @@ class DeckFacade {
     );
   }
 
-  Future<void> create(String deckName) async {
-    await deckCreator.create(deckName);
+  /// Creates a new deck with default settings and specified name, and returns its id.
+  Future<Id> create(String deckName) async {
+    return await deckCreator.create(deckName);
   }
 
   Future<void> update(DeckEntity deck) async {
