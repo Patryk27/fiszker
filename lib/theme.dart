@@ -6,8 +6,8 @@ const BODY_PADDING = 15.0;
 
 // Bottom Sheet
 
-// @todo bottom sheets have a small issue related to the border radius - all the clipped content is non-transparent, so
-//       it looks kinda weird when the bottom radius is high enough
+// @todo bottom sheets exhibit a small issue related to the border radius - all the clipped content is non-transparent,
+//       so it looks kinda weird when the bottom radius is high enough
 const BOTTOM_SHEET_BORDER_RADIUS = BASE_BORDER_RADIUS;
 
 // Card
