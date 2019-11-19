@@ -15,17 +15,16 @@ class DeckDeleter {
 
   /// See: [DeckFacade.delete]
   Future<void> delete(DeckEntity deck) async {
-    // Delete cards
+    // @todo transaction
+
     for (final card in await cardStorage.findByDeckId(deck.deck.id)) {
       await cardStorage.remove(card.id);
     }
 
-    // Delete boxes
     for (final box in await boxStorage.findByDeckId(deck.deck.id)) {
       await boxStorage.remove(box.id);
     }
 
-    // Delete deck
     await deckStorage.remove(deck.deck.id);
   }
 }

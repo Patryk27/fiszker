@@ -47,13 +47,13 @@ class CardModel extends Model {
   CardModel.create({
     @required this.deckId,
     @required this.boxId,
+    this.front = '',
+    this.back = '',
   })
       : assert(deckId != null),
         assert(boxId != null),
-        front = '',
-        back = '',
         createdAt = DateTime.now(),
-        exercisedAt = Optional.empty(),
+        exercisedAt = const Optional.empty(),
         super(id: Id.create());
 
   /// Returns a new [CardModel] overwritten with specified values.

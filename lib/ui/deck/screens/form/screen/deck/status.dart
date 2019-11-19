@@ -32,10 +32,12 @@ class _DeckStatusFieldState extends State<DeckStatusField> {
 
       items: buildItems(),
 
-      onChanged: (value) {
+      onChanged: (status) {
+        final newDeck = deck.changeStatus(status);
+
         DeckFormBloc
             .of(context)
-            .add(ChangeDeckStatus(deck, value));
+            .add(Submit(newDeck, notification: DeckStatusChanged()));
       },
     );
   }

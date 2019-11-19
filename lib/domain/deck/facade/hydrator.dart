@@ -9,6 +9,7 @@ class DeckHydrator {
       : assert(boxStorage != null),
         assert(cardStorage != null);
 
+  /// Builds an instance of [DeckEntity] from given [DeckModel], automatically fetching all required entities.
   Future<DeckEntity> hydrate(DeckModel deck) async {
     return DeckEntity(
       deck: deck,

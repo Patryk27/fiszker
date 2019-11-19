@@ -56,9 +56,11 @@ class _DeckNameFieldState extends State<DeckNameField> {
         // @todo currently user gets no notification after renaming (because it's quite ad-hoc solution), it could be
         //       improved (e.g. we could open an additional modal for renaming)
 
+        final newDeck = widget.deck.changeName(name);
+
         DeckFormBloc
             .of(context)
-            .add(ChangeDeckName(widget.deck, name));
+            .add(Submit(newDeck));
       }
     });
   }

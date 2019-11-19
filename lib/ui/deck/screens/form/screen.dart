@@ -188,15 +188,16 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
     // This serves no purpose besides maybe helping user to locate where the newly-created card ended up
     tabController.animateTo(1);
 
-    // Open the card creator
     showCreateCardForm(
       context: context,
       deck: deck.value,
 
       onSubmit: (card) {
+        final newDeck = deck.value.createCard(card.boxId, card.front, card.back);
+
         DeckFormBloc
             .of(context)
-            .add(CreateCard(deck.value, card));
+            .add(Submit(newDeck, notification: CardCreated()));
       },
     );
   }
@@ -209,15 +210,22 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
       card: card,
 
       onSubmit: (card) {
+        final newDeck = deck.value.updateCard(card,
+          newFront: card.front,
+          newBack: card.back,
+        );
+
         DeckFormBloc
             .of(context)
-            .add(UpdateCard(deck.value, card));
+            .add(Submit(newDeck, notification: CardUpdated()));
       },
 
       onDelete: () {
+        final newDeck = deck.value.deleteCard(card);
+
         DeckFormBloc
             .of(context)
-            .add(DeleteCard(deck.value, card));
+            .add(Submit(newDeck, notification: CardDeleted()));
       },
     );
   }
@@ -234,9 +242,11 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
       deck: deck.value,
 
       onSubmit: (box) {
+        final newDeck = deck.value.createBox(box.name);
+
         DeckFormBloc
             .of(context)
-            .add(CreateBox(deck.value, box));
+            .add(Submit(newDeck, notification: BoxCreated()));
       },
     );
   }
@@ -249,15 +259,19 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
       box: box,
 
       onSubmit: (box) {
+        final newDeck = deck.value.updateBox(box, newName: box.name);
+
         DeckFormBloc
             .of(context)
-            .add(UpdateBox(deck.value, box));
+            .add(Submit(newDeck, notification: BoxUpdated()));
       },
 
       onDelete: () {
+        final newDeck = deck.value.deleteBox(box);
+
         DeckFormBloc
             .of(context)
-            .add(DeleteBox(deck.value, box));
+            .add(Submit(newDeck, notification: BoxDeleted()));
       },
 
       onShowCards: () {
@@ -273,9 +287,11 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
   }
 
   /// Moves box to specified index.
-  Future<void> moveBox(BoxModel box, int newIndex) async {
+  void moveBox(BoxModel box, int newIndex) {
+    final newDeck = deck.value.moveBox(box, newIndex);
+
     DeckFormBloc
         .of(context)
-        .add(MoveBox(deck.value, box, newIndex));
+        .add(Submit(newDeck));
   }
 }

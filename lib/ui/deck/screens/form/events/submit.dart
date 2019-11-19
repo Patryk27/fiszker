@@ -8,9 +8,9 @@ class Submit extends DeckFormBlocEvent {
   final DeckEntity deck;
   final Optional<DeckFormBlocState> successNotification;
 
-  Submit(this.deck, { DeckFormBlocState successNotification })
+  Submit(this.deck, { DeckFormBlocState notification })
       : assert(deck != null),
-        successNotification = Optional.ofNullable(successNotification);
+        successNotification = Optional.ofNullable(notification);
 
   @override
   Stream<DeckFormBlocState> mapToState(DeckFormBloc bloc) async* {
