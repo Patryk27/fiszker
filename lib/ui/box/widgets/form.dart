@@ -245,11 +245,11 @@ Future<void> showEditBoxForm({
 
         onDelete: (deck.boxes.length > 2)
             ? Optional.of(onDelete)
-            : Optional.empty(),
+            : const Optional.empty(),
 
         onShowCards: (deck.countCardsInsideBox(box) > 0)
             ? Optional.of(onShowCards)
-            : Optional.empty(),
+            : const Optional.empty(),
       );
     },
   );

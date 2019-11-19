@@ -50,7 +50,7 @@ class _DeckFormScreenState extends State<DeckFormScreen> with SingleTickerProvid
 
   _Status status = _Status.Initializing;
 
-  Optional<DeckEntity> deck = Optional.empty();
+  Optional<DeckEntity> deck = const Optional.empty();
   TabController tabController;
 
   @override

@@ -5,6 +5,6 @@ import 'package:optional/optional.dart';
 ///   b) `Optional.of(newValue)` - if they are different.
 Optional<T> compare<T>(T oldValue, T newValue) {
   return (oldValue == newValue)
-      ? Optional.empty()
+      ? const Optional.empty()
       : Optional.of(newValue);
 }

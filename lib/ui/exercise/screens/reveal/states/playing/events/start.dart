@@ -7,7 +7,7 @@ class Start extends PlayingBlocEvent {
   Stream<PlayingBlocState> mapToState(PlayingBloc bloc) async* {
     // Let's animate-in the first card
     yield ShiftingCards(
-      Optional.empty(),
+      const Optional.empty(),
       Optional.of(bloc.exercise.currentCard),
     );
 

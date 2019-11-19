@@ -44,7 +44,7 @@ class _CardSizePainter extends CustomPainter {
 
   /// Since laying this widget out is a quite expensive operation (we need to perform *at least* two text layouts and a
   /// few other operations), we keep a cache here.
-  Optional<_CardSizeLayout> layout = Optional.empty();
+  Optional<_CardSizeLayout> layout = const Optional.empty();
 
   _CardSizePainter(this.text, this.textStyle, this.padding);
 

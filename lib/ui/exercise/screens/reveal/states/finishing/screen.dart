@@ -19,7 +19,7 @@ enum _Status {
 class _FinishingScreenState extends State<FinishingScreen> with TickerProviderStateMixin {
   _Status status = _Status.entering;
 
-  Optional<FinishingBlocState> currentState = Optional.empty();
+  Optional<FinishingBlocState> currentState = const Optional.empty();
 
   Animator enteringAnimator;
   Animator leavingAnimator;
