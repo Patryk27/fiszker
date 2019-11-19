@@ -56,14 +56,14 @@ class InMemoryDeckStorage implements DeckStorage {
   /// Throws an exception if there's a deck with specified id in the database.
   void _assertNotExists(Id id) {
     if (_decks.containsKey(id)) {
-      throw 'storage already contains deck [id=$id]';
+      throw 'storage already contains deck with id `$id`';
     }
   }
 
   /// Throws an exception if there's no deck with specified id in the database.
   void _assertExists(Id id) {
     if (!_decks.containsKey(id)) {
-      throw 'storage does not contain deck [id=$id]';
+      throw 'storage does not contain deck with id `$id`';
     }
   }
 }

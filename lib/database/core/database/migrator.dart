@@ -10,7 +10,7 @@ class DatabaseMigrator {
   /// application has been just freshly installed).
   static Future<void> create(Database db, int version) async {
     print('(db) Seems like the application has been just installed - we have to intialize the database first.');
-    print('(db) Migrating database to version [$version]:');
+    print('(db) Migrating database to version `$version`:');
 
     for (var i = 0; i < version; i += 1) {
       await _runMigration(db, i);
@@ -25,7 +25,7 @@ class DatabaseMigrator {
     assert(oldVersion < newVersion);
 
     print('(db) Seems like the application has been upgraded - we have to upgrade the database too.');
-    print('(db) Migrating the database from version [$oldVersion] to [$newVersion]:');
+    print('(db) Migrating the database from version `$oldVersion` to `$newVersion`:');
 
     for (var i = oldVersion; i < newVersion; i += 1) {
       await _runMigration(db, i);
@@ -35,7 +35,7 @@ class DatabaseMigrator {
   }
 
   static Future<void> _runMigration(Database db, int version) async {
-    print('(db) -> running migration: [$version]');
+    print('(db) -> running migration: `$version`');
 
     await migrations[version](db);
   }

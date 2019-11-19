@@ -50,13 +50,13 @@ class InMemoryCardsStorage implements CardStorage {
 
   void _assertNotExists(Id id) {
     if (_cards.containsKey(id)) {
-      throw 'storage already contains card [id=$id]';
+      throw 'storage already contains card with id `$id`';
     }
   }
 
   void _assertExists(Id id) {
     if (!_cards.containsKey(id)) {
-      throw 'storage does not contain card [id=$id]';
+      throw 'storage does not contain card with id `$id`';
     }
   }
 }

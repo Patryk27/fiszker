@@ -29,7 +29,7 @@ class DatabaseProvider {
 
     final path = join(await getDatabasesPath(), 'fiszker.db');
 
-    print('(db) Opening database: [$path]');
+    print('(db) Opening database `$path`');
 
     _db = Optional.of(await openDatabase(
       path,

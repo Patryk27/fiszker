@@ -49,13 +49,13 @@ class InMemoryBoxStorage implements BoxStorage {
 
   void _assertNotExists(Id id) {
     if (_boxes.containsKey(id)) {
-      throw 'storage already contains box [id=$id]';
+      throw 'storage already contains box with id `$id`';
     }
   }
 
   void _assertExists(Id id) {
     if (!_boxes.containsKey(id)) {
-      throw 'storage does not contain box [id=$id]';
+      throw 'storage does not contain box with id `$id`';
     }
   }
 }

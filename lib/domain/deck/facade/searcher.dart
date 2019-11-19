@@ -18,7 +18,7 @@ class DeckSearcher {
     final deck = await deckStorage.findById(id);
 
     if (!deck.isPresent) {
-      throw 'deck [id=$id] does not exist';
+      throw 'deck with id `$id` was not found';
     }
 
     return await deckHydrator.hydrate(deck.value);
