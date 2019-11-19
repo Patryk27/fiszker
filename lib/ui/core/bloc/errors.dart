@@ -26,7 +26,7 @@ class BlocErrorHandlerDelegate extends BlocDelegate {
     if (DEBUG_LOG_BLOC_ERRORS) {
       print('(bloc) !! BLoC has crashed !!');
       print('(bloc) bloc = $bloc');
-      print('(bloc) erro = $error');
+      print('(bloc) error = $error');
       print('(bloc) stacktrace = $stacktrace');
     }
 
