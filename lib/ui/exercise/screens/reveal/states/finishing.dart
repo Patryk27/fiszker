@@ -16,7 +16,7 @@ class Finishing extends RevealExerciseBlocState {
   @override
   Widget buildWidget() {
     return BlocProvider<FinishingBloc>(
-      builder: (context) {
+      create: (context) {
         return FinishingBloc(exercise: exercise);
       },
 

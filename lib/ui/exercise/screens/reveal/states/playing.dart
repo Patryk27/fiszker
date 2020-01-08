@@ -24,7 +24,7 @@ class Playing extends RevealExerciseBlocState {
   @override
   Widget buildWidget() {
     return BlocProvider<PlayingBloc>(
-      builder: (context) {
+      create: (context) {
         final exerciseFacade = RevealExerciseBloc
             .of(context)
             .exerciseFacade;

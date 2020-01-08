@@ -102,7 +102,7 @@ class Fiszker extends StatelessWidget {
           return BlocProvider<AppInitializeBloc>(
             child: AppInitializeScreen(),
 
-            builder: (context) {
+            create: (context) {
               return AppInitializeBloc(
                 databaseProvider: databaseProvider,
               );
@@ -123,7 +123,7 @@ class Fiszker extends StatelessWidget {
           return BlocProvider<DeckIndexBloc>(
             child: DeckIndexScreen(),
 
-            builder: (context) {
+            create: (context) {
               return DeckIndexBloc(
                 deckFacade: deckFacade,
               );
@@ -140,7 +140,7 @@ class Fiszker extends StatelessWidget {
                   .arguments,
             ),
 
-            builder: (context) {
+            create: (context) {
               return DeckFormBloc(
                 deckFacade: deckFacade,
               );
@@ -157,7 +157,7 @@ class Fiszker extends StatelessWidget {
                   .arguments,
             ),
 
-            builder: (context) {
+            create: (context) {
               return RevealExerciseBloc(
                 deckFacade: deckFacade,
                 exerciseFacade: exerciseFacade,
